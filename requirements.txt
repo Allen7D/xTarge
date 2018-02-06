@@ -1,0 +1,15 @@
+Flask==0.12.2
+Flask-Bootstrap==3.3.7.1
+Flask-Login==0.4.1
+Flask-Principal==0.4.0
+Flask-Script==2.0.6
+Flask-Security==3.0.0
+Flask-SocketIO==2.9.2
+Flask-Cors==3.0.3
+Flask-WTF==0.14.2
+Jinja2==2.10
+pymongo==2.8.1
+python-socketio==1.8.3
+requests==2.5.1
+Werkzeug==0.12.2
+WTForms==2.1
