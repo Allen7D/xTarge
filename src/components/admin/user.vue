@@ -195,7 +195,7 @@
                         res.data.forEach((item, index) => {
                             this.userList.push({
                                 id: item.id,
-                                date: '木有注册时间',
+                                date: '没有注册时间',
                                 username: item.username,
                                 pass: '******',
                                 level: item.level
