@@ -18,10 +18,10 @@ import os
 import socket
 from select import select
 
-iec104_json_path = "./data/iec104_server.json"
-iec104_json_dst = "/etc/safe/iec104.json"
-modbus_json_path = "./data/modbus_server.json"
-modbus_json_dst = "/etc/safe/modbus.json"
+iec104_json_path = "./server/data/iec104_server.json"
+iec104_json_dst = "./server/etc/safe/iec104.json"
+modbus_json_path = "./server/data/modbus_server.json"
+modbus_json_dst = "./server/etc/safe/modbus.json"
 
 async_mode = "threading"
 
@@ -64,7 +64,7 @@ def login():
         temp = Temp(u_id, name, password, level)
 
         login_user(temp)
-        
+
         return login_u(current_user)
 
     return json.dumps([{'msg': '账号和密码不匹配'},{'errorCode':'error_args'}]), 401
@@ -76,22 +76,22 @@ def logout():
     session.pop('password', None)
     return json.dumps({"result":True}), 200
 
-@app.route('/api/users', methods=['POST']) 
+@app.route('/api/users', methods=['POST'])
 @admin_required
 def register():
-    #return 'register'    
+    #return 'register'
     data = register_form()
     admin_pw = request.form['admin_password']
 
     new_user = json.loads(data)
-    #return new_user['name']                     
+    #return new_user['name']
     if query(new_user['name'], 'name') != None:
         return 'name has already exist'
 
     tag = request.args.get('tag')
     admin_user = query(tag, 'id')
     admin_level = admin_user.get('level')
-    admin_password = admin_user.get('password') 
+    admin_password = admin_user.get('password')
 
     if not verify_password(admin_password, admin_pw):
         return json.dumps([{'msg': 'admin password error'},{'errorCode':'error_args'}]), 400
@@ -154,7 +154,7 @@ def reset():
         new_set = request.form['new_level']
         flag = 'level'
     admin_pw = request.form['admin_password']
-    
+
     if not verify_password(admin_password, admin_pw):
         return json.dumps([{'msg': 'admin password error'},{'errorCode':'error_args'}]), 400
 
@@ -185,10 +185,10 @@ def action_id():
     for info in info_s:
         data = {"username":info.get('user_name'), "user_id":info.get('user_id'), "os":info.get('os'), "time":info.get('time')}
         info_list.append(data)
-    
+
     if len(info_list) == 1:
-        return (json.dumps(info_list[0])), 200    
-    
+        return (json.dumps(info_list[0])), 200
+
     return json.dumps(info_list), 200
 
 @app.route("/api/action_time", methods = ['GET'] )
@@ -205,10 +205,10 @@ def action_time():
     for info in info_s:
         data = {"username":info.get('user_name'), "user_id":info.get('user_id'), "os":info.get('os'), "time":info.get('time')}
         info_list.append(data)
-    
+
     if len(info_list) == 1:
-        return (json.dumps(info_list[0])), 200 
-    
+        return (json.dumps(info_list[0])), 200
+
     return json.dumps(info_list), 200
 
 @app.route("/api/alert", methods = ['GET'] )
@@ -220,10 +220,10 @@ def alert():
     for info in info_s:
         data = {"alert":info.get('alert'), "time":info.get('time')}
         info_list.append(data)
-    
+
     if len(info_list) == 1:
-        return (json.dumps(info_list[0])), 200 
-    
+        return (json.dumps(info_list[0])), 200
+
     return json.dumps(info_list), 200
 
 
@@ -309,7 +309,7 @@ def deal_with_json_data(dst):
         content = json.load(f)
     return content
 
-    
+
 
 @socketio.on('connect')
 def test_connect():
@@ -323,7 +323,7 @@ def test_connect():
         modbus_config = modbus_file.read()
         modbus_file.close()
 
-        socketio.emit("init", {"iec104": iec104_config, "modbus": modbus_config})
+        # socketio.emit("init", {"iec104": iec104_config, "modbus": modbus_config})
     except:
         socketio.emit("init", {"iec104": "{}", "modbus": "{}"})
         print("Loading file error!")
@@ -353,10 +353,10 @@ def receive_json(data):
         print("Receive json file")
 
         now = datetime.datetime.now()
-        time = now.strftime('%Y-%m-%d %H:%M:%S')  
-        
+        time = now.strftime('%Y-%m-%d %H:%M:%S')
+
         user_name = current_user.name
-        user_id = current_user.id 
+        user_id = current_user.id
         MongoClient().safe_protocol.os.insert({'user_id':user_id, 'user_name':user_name, 'time':time, 'os':deal_with_json_data(dst=json_dst)})
         socketio.emit("setting", "Success!")
     except:
@@ -366,8 +366,8 @@ def receive_json(data):
 
 if __name__ == '__main__':
 
-    Watcher() 
-    
+    Watcher()
+
     t1 = threading.Thread(target=main_server, args=())
     t2 = threading.Thread(target=iec104_monitor_server, args=())
     t3 = threading.Thread(target=modbus_monitor_server, args=())

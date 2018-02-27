@@ -62,7 +62,7 @@
             submitForm(formName) {
                 let postData = 'username=' + this.ruleForm.username + '&password=' + this.ruleForm.pass;
 
-                axios.post('http://localhost:5000/login', postData, {
+                axios.post('http://0.0.0.0:5000/login', postData, {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
