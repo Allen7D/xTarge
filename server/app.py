@@ -25,7 +25,7 @@ modbus_json_dst = "./server/etc/safe/modbus.json"
 
 async_mode = "threading"
 
-app = Flask(__name__, static_folder="../dist/static", static_url_path="", template_folder="../dist")
+app = Flask(__name__, static_folder="../dist/static", template_folder="../dist")
 app.config['SECRET_KEY'] = 'secret!'
 cors = CORS(app, resources={"/*": {"origins": "*"}})
 bootstrap = Bootstrap(app)
@@ -42,12 +42,10 @@ def load_user(user_id):
     temp = Temp(user.get('_id'), user.get('name'), user.get('password'), user.get('level'))
     return temp
 
-# @app.route("/", methods=['GET', 'POST'])
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
-    return render_template("index.html")
-    # return redirect(url_for('login'))
+  return render_template("index.html")
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -323,7 +321,7 @@ def test_connect():
         modbus_config = modbus_file.read()
         modbus_file.close()
 
-        # socketio.emit("init", {"iec104": iec104_config, "modbus": modbus_config})
+        socketio.emit("init", {"iec104": iec104_config, "modbus": modbus_config})
     except:
         socketio.emit("init", {"iec104": "{}", "modbus": "{}"})
         print("Loading file error!")
@@ -355,8 +353,8 @@ def receive_json(data):
         now = datetime.datetime.now()
         time = now.strftime('%Y-%m-%d %H:%M:%S')
 
-        user_name = current_user.name
-        user_id = current_user.id
+        user_name = data['user_name'] # current_user.name
+        user_id = data['user_id'] # current_user.id
         MongoClient().safe_protocol.os.insert({'user_id':user_id, 'user_name':user_name, 'time':time, 'os':deal_with_json_data(dst=json_dst)})
         socketio.emit("setting", "Success!")
     except:

@@ -19,7 +19,7 @@
                                 <!--<v-selection :remote_value.sync="function_code"-->
                                 <!--:options="fc_options"></v-selection>-->
 
-                                <el-select v-model="function_code.fc_id" placeholder="请选择">
+                                <el-select v-model="function_code.id" placeholder="请选择">
                                     <el-option
                                             v-for="item in fc_options"
                                             :key="item.value"
@@ -117,30 +117,9 @@
             },
             addFunctionCode(arr) {
                 arr.push({
-                    fc_id: 1,
+                    id: 1,
                     default: true,
-                    excepts: [
-                        {
-                            start: {
-                                year: -1,
-                                mon: -1,
-                                day: -1,
-                                hour: -1,
-                                min: -1,
-                                sec: -1,
-                                wday: -1
-                            },
-                            end: {
-                                year: -1,
-                                mon: -1,
-                                day: -1,
-                                hour: -1,
-                                min: -1,
-                                sec: -1,
-                                wday: -1
-                            }
-                        }
-                    ]
+                    excepts: []
                 });
             },
             removeArray(arr, item) {

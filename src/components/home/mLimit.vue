@@ -107,44 +107,9 @@
                         default: true
                     },
                     function_codes: [
-                        {
-                            fc_id: 3,
-                            default: true,
-                            excepts: [
-                                {
-                                    start: {
-                                        year: -1,
-                                        mon: -1,
-                                        day: -1,
-                                        hour: -1,
-                                        min: -1,
-                                        sec: -1,
-                                        wday: -1
-                                    },
-                                    end: {
-                                        year: -1,
-                                        mon: -1,
-                                        day: -1,
-                                        hour: -1,
-                                        min: -1,
-                                        sec: -1,
-                                        wday: -1
-                                    }
-                                }
-                            ]
-                        }
                     ],
-                    memories: [{
-                        m_id: 2,
-                        fc_id: 3,
-                        default: true,
-                        excepts: [
-                            {
-                                start: '',
-                                end: ''
-                            }
-                        ]
-                    }]
+                    memories: [
+                    ]
                 });
             },
             remoteRestriction(arr) {

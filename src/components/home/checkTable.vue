@@ -1,4 +1,5 @@
 <template>
+
   <div class="check-table">
 
     <div class="connection border-2px">
@@ -60,58 +61,58 @@
                              :label="'例外 ' + exceptIndex + ' :'"
                              :key="except.key">
                       <div class="fc-except">
-                      <el-form-item>
-                        例外{{exceptIndex + 1}}:
-                        <el-input placeholder="" v-if="except.start.year !== -1" v-model="except.start.year" style="width: 100px;" disabled>
-                          <template slot="append">年</template>
-                        </el-input>
+                        <el-form-item>
+                          例外{{exceptIndex + 1}}:
+                          <el-input placeholder="" v-if="except.start.year !== -1" v-model="except.start.year" style="width: 100px;" disabled>
+                            <template slot="append">年</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.start.mon !== -1"  v-model="except.start.mon" disabled>
-                          <template slot="append">月</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.start.mon !== -1"  v-model="except.start.mon" disabled>
+                            <template slot="append">月</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.start.day !== -1"  v-model="except.start.day" disabled>
-                          <template slot="append">日</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.start.day !== -1"  v-model="except.start.day" disabled>
+                            <template slot="append">日</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.start.hour !== -1"  v-model="except.start.hour" disabled>
-                          <template slot="append">时</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.start.hour !== -1"  v-model="except.start.hour" disabled>
+                            <template slot="append">时</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.start.min !== -1"  v-model="except.start.min" disabled>
-                          <template slot="append">分</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.start.min !== -1"  v-model="except.start.min" disabled>
+                            <template slot="append">分</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.start.sec !== -1"  v-model="except.start.sec" disabled>
-                          <template slot="append">秒</template>
-                        </el-input>
-                      </el-form-item>
-                      <span style="margin-right: 5px;">~</span>
-                      <el-form-item>
-                        <el-input placeholder="" v-if="except.end.year !== -1" v-model="except.end.year" style="width: 100px;" disabled>
-                          <template slot="append">年</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.start.sec !== -1"  v-model="except.start.sec" disabled>
+                            <template slot="append">秒</template>
+                          </el-input>
+                        </el-form-item>
+                        <span style="margin-right: 5px;">~</span>
+                        <el-form-item>
+                          <el-input placeholder="" v-if="except.end.year !== -1" v-model="except.end.year" style="width: 100px;" disabled>
+                            <template slot="append">年</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.end.mon !== -1" v-model="except.end.mon" disabled>
-                          <template slot="append">月</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.end.mon !== -1" v-model="except.end.mon" disabled>
+                            <template slot="append">月</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.end.day !== -1" v-model="except.end.day" disabled>
-                          <template slot="append">日</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.end.day !== -1" v-model="except.end.day" disabled>
+                            <template slot="append">日</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.end.hour !== -1" v-model="except.end.hour" disabled>
-                          <template slot="append">时</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.end.hour !== -1" v-model="except.end.hour" disabled>
+                            <template slot="append">时</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.end.min !== -1" v-model="except.end.min" disabled>
-                          <template slot="append">分</template>
-                        </el-input>
+                          <el-input placeholder="" v-if="except.end.min !== -1" v-model="except.end.min" disabled>
+                            <template slot="append">分</template>
+                          </el-input>
 
-                        <el-input placeholder="" v-if="except.end.sec !== -1" v-model="except.end.sec" disabled>
-                          <template slot="append">秒</template>
-                        </el-input>
-                      </el-form-item>
+                          <el-input placeholder="" v-if="except.end.sec !== -1" v-model="except.end.sec" disabled>
+                            <template slot="append">秒</template>
+                          </el-input>
+                        </el-form-item>
                       </div>
                     </el-form>
                   </el-form-item>
@@ -156,14 +157,14 @@
                                  v-for="(except, index) in memory.excepts"
                                  :label="'例外 ' + index + ' :'"
                                  :key="except.key">
-                            例外{{index + 1}} :
-                            <el-input v-model="except.start" disabled>
-                              <template slot="prepend">开始地址</template>
-                            </el-input>
+                          例外{{index + 1}} :
+                          <el-input v-model="except.start" disabled>
+                            <template slot="prepend">开始地址</template>
+                          </el-input>
 
-                            <el-input v-model="except.end" disabled>
-                              <template slot="prepend">结束地址</template>
-                            </el-input>
+                          <el-input v-model="except.end" disabled>
+                            <template slot="prepend">结束地址</template>
+                          </el-input>
                         </el-form>
 
                       </el-form-item>

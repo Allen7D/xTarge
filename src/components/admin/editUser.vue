@@ -95,7 +95,19 @@
                     pass: this.form.pass,
                     level: this.form.level
                 });
+
+                axios.put(`/api/users?tag=${parseInt(localStorage['id'])}`, {
+                    user_id: row.id,
+                    new_password: row.pass,
+                    new_level: row.level
+                }).then((res) => {
+                    console.log('hehe', res);
+                }).catch((err) => {
+                    console.log(err);
+                });
+
                 this.isEditUser = false;
+
             }
         }
     };

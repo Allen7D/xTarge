@@ -17,7 +17,7 @@
                             <el-form-item :inline="true">
                                 内存类型:
                                 <!--<v-selection :remote_value.sync="memory.m_id" :options="m_options"></v-selection>-->
-                                <el-select v-model="memory.m_id" placeholder="请选择">
+                                <el-select v-model="memory.id" placeholder="请选择">
                                     <el-option
                                             v-for="item in m_options"
                                             :key="item.value"
@@ -27,7 +27,7 @@
                                     </el-option>
                                 </el-select>
                                 功能码：
-                                <el-select v-model="memory.fc_id" placeholder="请选择">
+                                <el-select v-model="memory.id2" placeholder="请选择">
                                     <el-option
                                             v-for="item in fc_options"
                                             :key="item.value"
@@ -110,14 +110,10 @@
             },
             addMemory(arr) {
                 arr.push({
-                    m_id: 1,
-                    fc_id: 1,
+                    id: 1,
+                    id2: 1,
                     default: true,
                     excepts: [
-                        {
-                            start: '',
-                            end: ''
-                        }
                     ]
                 });
             },
