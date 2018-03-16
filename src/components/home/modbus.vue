@@ -275,6 +275,7 @@
   import alertInfo from './alertInfo';
   import mLimit from './mLimit';
   import {sortByLabel, removeByValue} from 'common/js/util';
+  import axios from 'axios';
 
   export default {
     components: {
@@ -366,23 +367,32 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(JSON.stringify(this.configForm, null, 4));
           this.$socket.emit('setting', {
             'json': JSON.stringify(this.configForm, null, 4),
             'type': 'modbus',
             'user_name': localStorage['username'],
             'user_id': localStorage['id']
           });
-          this.$message({
-            type: 'success',
-            message: '发送成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消发送!'
-          });
+        let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&op=${JSON.stringify(this.configForm, null)}`;
+        axios.post('/api/v1.0/ops', postData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(res => {
+          console.log(res);
+        this.$message({
+          type: 'success',
+          message: '发送成功!'
         });
+      }).catch(err => {
+          console.error(err);
+      });
+      }).catch(() => {
+          this.$message({
+          type: 'info',
+          message: '已取消发送!'
+        });
+      });
       },
       handleChange(value, direction, movedKeys) {
         if (direction === 'right') {

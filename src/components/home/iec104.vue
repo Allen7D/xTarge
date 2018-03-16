@@ -202,6 +202,8 @@
   import connection from 'components/connection/connection';
   import alertInfo from './alertInfo';
   import {sortByLabel, removeByValue} from 'common/js/util';
+  import axios from 'axios';
+
   export default {
     components: {
       'fc-limit': functionCodeLimit,
@@ -237,8 +239,7 @@
 
         for (let i in this.iec104) {
           this.fc_options.push({'value': parseInt(i.split(' ')[0]), 'label': i});
-        }
-        ;
+        };
         this.fcodes.forEach((fcode, index) => {
           this.fc_ad_data.push({
             label: fcode,
@@ -281,11 +282,25 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(JSON.stringify(this.configForm, null, 4));
-          this.$socket.emit('setting', {'json': JSON.stringify(this.configForm, null, 4), 'type': 'iec104'});
-          this.$message({
-            type: 'success',
-            message: '发送成功!'
+          this.$socket.emit('setting', {
+            'json': JSON.stringify(this.configForm, null, 4),
+            'type': 'iec104',
+            'user_name': localStorage['username'],
+            'user_id': localStorage['id']
+          });
+          let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=iec104&op=${JSON.stringify(this.configForm, null)}`;
+          axios.post('/api/v1.0/ops', postData, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }).then(res => {
+            console.log(res);
+            this.$message({
+              type: 'success',
+              message: '发送成功!'
+            });
+          }).catch(err => {
+            console.error(err);
           });
         }).catch(() => {
           this.$message({

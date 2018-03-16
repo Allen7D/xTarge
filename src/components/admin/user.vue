@@ -115,7 +115,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="editUserVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleEditUser(123)">确 定</el-button>
+          <el-button type="primary" @click="handleEditUser(currentUser)">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -157,26 +157,9 @@
           ]
         },
         formLabelWidth: '120px',
-        userList: [{
-          id: '0001',
-          date: '2016/05/03 上午4:33:15',
-          username: 'super_admin',
-          pass: '159951',
-          level: 'A'
-        }, {
-          id: '0002',
-          date: '2016/05/02 下午5:25:25',
-          username: 'high_level_admin',
-          pass: '000000',
-          level: 'B'
-        }, {
-          id: '0003',
-          date: '2016/05/04 下午4:28:15',
-          username: 'normal_admin',
-          pass: '888888',
-          level: 'C'
-        }],
+        userList: [],
         currentUser: {
+          id: '',
           username: '',
           pass: '',
           checkPass: '',
@@ -189,12 +172,12 @@
       };
     },
     created() {
-      axios.get('/api/users')
+      axios.get('/api/v1.0/users')
         .then((res) => {
-          res.data.forEach((item, index) => {
+          res.data.users.forEach((item, index) => {
             this.userList.push({
               id: item.user_id,
-              date: '没有注册时间',
+              date: item.register_time,
               username: item.username,
               pass: '******',
               level: item.level
@@ -221,6 +204,7 @@
         this.currentUser.id = row.id;
         this.currentUser.username = row.username;
         this.currentUser.level = row.level;
+
         this.editUserVisible = true;
       },
       deleteUser(index, row) {
@@ -237,9 +221,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.delete(`/api/users?tag=${parseInt(localStorage['id'])}`, {
-            id: row.id
-          }).then((res) => {
+          axios.delete(`/api/v1.0/users/${row.id}`).then((res) => {
             console.log('haha', res);
           });
           this.$message({
@@ -263,18 +245,58 @@
           });
           return false;
         }
-        arr.push({
-          id: item.id,
-          date: (new Date()).toLocaleString(),
-          username: item.username,
-          pass: item.pass,
-          level: item.level || 'C'
+        let postData = 'id=' + item.id +
+          '&username=' + item.username +
+          '&password=' + item.pass +
+          '&level=' + item.level;
+
+        axios.post('/api/v1.0/users', postData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(res => {
+          arr.push({
+            id: item.id,
+            date: (new Date()).toLocaleString(),
+            username: item.username,
+            pass: item.pass,
+            level: item.level || 'C'
+          });
+        }).catch(err => {
+          console.error(err);
         });
         this.addUserVisible = false;
       },
-      handleEditUser(arr) {
-        console.log(arr);
-        this.isEditUser = false;
+      handleEditUser(row) {
+        let postData = 'password=' + row.pass + '&level=' + row.level;
+        axios.put(`/api/v1.0/users/${row.id}`, postData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(res => {
+          // 刷新用户列表
+          this.userList = [];
+          axios.get('/api/v1.0/users')
+            .then((res) => {
+              res.data.users.forEach((item, index) => {
+                this.userList.push({
+                  id: item.user_id,
+                  date: item.register_time,
+                  username: item.username,
+                  pass: '******',
+                  level: item.level
+                });
+              });
+            });
+        })
+          .catch(err => {
+            console.error('更新失败:', err);
+          });
+        this.currentUser.id = '';
+        this.currentUser.username = '';
+        this.currentUser.level = '';
+
+        this.editUserVisible = false;
       }
     }
   };

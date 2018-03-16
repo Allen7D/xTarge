@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # coding:utf-8
 import json
-import datetime
-import time
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from pymongo import MongoClient
 from flask import request
-from flask_login import current_user, UserMixin, AnonymousUserMixin
+from flask_login import UserMixin
 
 class Temp(UserMixin):
     is_authenticated = True
@@ -18,11 +17,11 @@ class Temp(UserMixin):
         self.id =u_id
         self.name = name
         self.password = password
-        self.level = level 
+        self.level = level
 
     def __repr__(self):
         return self.name
-    
+
     def get_id(self):
         return self.id
 
@@ -31,8 +30,8 @@ class Temp(UserMixin):
             return False
 
         if self.level == 'A' or 'B':
-            return True 
-        
+            return True
+
 def encrypt_passowrd(password):
     return generate_password_hash(password)
 
@@ -73,7 +72,7 @@ def register_form():
     userlevel = request.form['level']
 
     return json.dumps({"_id":user_id, "name":username, "password":e_password, "level":userlevel})
- 
+
 def insert(new_user):
     try:
         MongoClient().safe_protocol.user.insert({'_id':int(new_user['_id']),'name':new_user['name'],'password':new_user['password'],'level':new_user['level']})
@@ -91,7 +90,7 @@ def update_set(user, new_set, flag):
         MongoClient().safe_protocol.user.update({'_id':int(user_id)},{'$set':{'level':new_set}})
         return json.dumps({"result":True}), 202
 
-#decorator
+
 def admin_required(func):
     @wraps(func)
     def decorated_function(*args, **kw):
@@ -103,5 +102,5 @@ def admin_required(func):
         if user.get('level') == 'C':
             return json.dumps([{'errorMsg': 'forbidden'},{'errorCode':'error_args'}]), 401
         return func(*args, **kw)
-        
+
     return decorated_function

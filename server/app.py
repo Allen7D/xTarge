@@ -1,34 +1,31 @@
 #!/usr/bin/env python
 # coding:utf-8
+
 from flask import Flask, render_template, session, request,redirect,url_for,flash
 from flask_socketio import SocketIO, emit
-from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required, current_user, LoginManager, UserMixin, AnonymousUserMixin
 from flask_cors import CORS
-from bson.objectid import ObjectId
 from pymongo import MongoClient
 from func import *
-from watcher import Watcher
+from utils.watcher import Watcher
 
 import json
-import signal
-import sys
 import threading
 import os
 import socket
 from select import select
+import datetime
 
 iec104_json_path = "./server/data/iec104_server.json"
-iec104_json_dst = "./server/etc/safe/iec104.json"
+iec104_json_dst = "/etc/safe/iec104.json"
 modbus_json_path = "./server/data/modbus_server.json"
-modbus_json_dst = "./server/etc/safe/modbus.json"
+modbus_json_dst = "/etc/safe/modbus.json"
 
 async_mode = "threading"
 
 app = Flask(__name__, static_folder="../dist/static", template_folder="../dist")
 app.config['SECRET_KEY'] = 'secret!'
 cors = CORS(app, resources={"/*": {"origins": "*"}})
-bootstrap = Bootstrap(app)
 socketio = SocketIO(app, async_mode=async_mode)
 
 login_manager = LoginManager()
@@ -49,7 +46,7 @@ def index(path):
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['username'] # args.get('***')获取URL中的get请求的参数, form获取POST过来的表单
+    username = request.form['username'] # request.args.get('')获取URL中的get请求的参数, request.form['']获取POST过来的表单
     userpw = request.form['password']
 
     user = query(username, 'name')
@@ -63,6 +60,7 @@ def login():
 
         login_user(temp)
 
+        print(login_u(current_user))
         return login_u(current_user)
 
     return json.dumps([{'msg': '账号和密码不匹配'},{'errorCode':'error_args'}]), 401
