@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from flask_script import Manager
 import time
 
-from model.db import db_user, db_os
+from model.db import db_user, db_op
 
 LEVEL1, LEVEL2, LEVEL3 = 'A', 'B', 'C'
 register_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -51,7 +51,7 @@ def wipeUser():
 
 @DBManager.command
 def showOS():
-  ops = db_os.find({})
+  ops = db_op.find({})
   for op in ops:
     print(op)
 
