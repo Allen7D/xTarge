@@ -6,8 +6,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import time
 
 db_user = MongoClient().safe_protocol.user
-db_os = MongoClient().safe_protocol.os
-
+db_op = MongoClient().safe_protocol.os
+db_alert = MongoClient().safe_protocol.alert
 
 def get_users():
   user_list = []
@@ -68,7 +68,7 @@ def hash_check(hashed_data, unhashed_data):
 '''
 def get_operationes():
   op_list = []
-  ops = db_os.find()
+  ops = db_op.find()
   for op in ops:
     op = {
       'user_id': op.get('user_id'),
@@ -88,10 +88,24 @@ def add_operation(op):
     'protocol_type': op['protocol_type'],
     'os': op['op']
   }
-  db_os.insert(op)
+  db_op.insert(op)
 
 
 '''
   报警数据
 '''
+def get_alerts():
+  alert_list = []
+  alerts = db_alert.find()
+  for alert in alerts:
+    alert = {
+      'time': alert.get('time'),
+      'alert_type': alert.get('alert')['type'],
+      'message': alert.get('alert')['Message']
+    }
+    alert_list.append(alert)
+
+  return {'alerts': alert_list}
+
+
 

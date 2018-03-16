@@ -8,23 +8,25 @@
         <el-table-column label="报警记录列表">
         <el-table-column
                 fixed
-                prop="index"
+                type="index"
                 label="序号"
                 width="80">
         </el-table-column>
         <el-table-column
-                prop="date"
+                sortable
+                prop="time"
                 label="时间"
                 width="200">
         </el-table-column>
         <el-table-column
-                prop="message"
-                label="Message"
+                sortable
+                prop="alert_type"
+                label="类型"
                 width="100">
         </el-table-column>
         <el-table-column
-                prop="code"
-                label="Code"
+                prop="message"
+                label="Message"
                 width="">
         </el-table-column>
             </el-table-column>
@@ -32,46 +34,24 @@
 </template>
 
 <script>
+    import axios from 'axios';
     export default {
         data() {
             return {
-                alertData: [{
-                    index: '0001',
-                    date: '2016-05-03',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }, {
-                    index: '0002',
-                    date: '2016-05-02',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }, {
-                    index: '0003',
-                    date: '2016-05-04',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }, {
-                    index: '0004',
-                    date: '2016-05-01',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }, {
-                    index: '0005',
-                    date: '2016-05-08',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }, {
-                    index: '0006',
-                    date: '2016-05-06',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }, {
-                    index: '0007',
-                    date: '2016-05-07',
-                    message: 'error',
-                    code: '0x15 Measured value, normalized value without quality descriptor'
-                }]
+                alertData: []
             };
+        },
+        created() {
+            axios.get('/api/v1.0/alerts')
+              .then((res) => {
+                  res.data.alerts.forEach((item, index) => {
+                      this.alertsDate.push({
+                          alert_type: item.alert_type,
+                          time: item.time,
+                          message: JSON.stringify(item.message)
+                      });
+                  });
+              });
         }
     };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="oplog">
     <el-table
-      :data="alertData"
+      :data="opDate"
       stripe
       border
       style="width: 1200px"
@@ -40,14 +40,14 @@
   export default {
     data() {
       return {
-        alertData: []
+        opDate: []
       };
     },
     created() {
       axios.get('/api/v1.0/ops')
         .then((res) => {
           res.data.ops.forEach((item, index) => {
-            this.alertData.push({
+            this.opDate.push({
               user_id: item.user_id,
               username: item.username,
               time: item.time,

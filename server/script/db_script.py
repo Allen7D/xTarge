@@ -10,7 +10,6 @@ import time
 
 from model.db import db_user, db_os
 
-
 LEVEL1, LEVEL2, LEVEL3 = 'A', 'B', 'C'
 register_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 DBManager = Manager()

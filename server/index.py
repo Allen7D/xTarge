@@ -83,7 +83,6 @@ def api_delete_user(user_id):
 
 @app.route('/api/v1.0/ops', methods=['GET'])
 def api_get_ops():
-  print('heheheh')
   data = db.get_operationes()
   return json.dumps(data), 200
 
@@ -100,6 +99,10 @@ def api_post_ops():
 
   return json.dumps({}), 200
 
+@app.route('/api/v1.0/alerts', methods=['GET'])
+def api_get_alerts():
+  data = db.get_alerts()
+  return json.dumps(data), 200
 
 def main_server(port=5000):
   socketio.run(app, host="0.0.0.0", port=port)
