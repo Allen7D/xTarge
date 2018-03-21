@@ -30,7 +30,7 @@
       监控 <span>(监控界面：每当设备收到不符合配置的数据包，信息将显示)</span>
     </nav>
     <div class="iec104-content">
-      <alert-info></alert-info>
+      <alert-info :alert-data="alertData" :protocol-type="iec104"></alert-info>
       <br>
     </div>
 
@@ -213,6 +213,7 @@
     },
     data() {
       return {
+        alertData: [],
         showForm: false,
         activeName: '1',
         fcodes: [],
@@ -223,7 +224,7 @@
         configForm: {
           connection: {
             ip: '127.0.0.1',
-            port: 8000
+            port: 8010
           },
           restrictions: []
         },
@@ -248,6 +249,16 @@
           });
         });
       });
+      axios.get('/api/v1.0/alerts/iec104')
+        .then((res) => {
+          res.data.alerts.forEach((item, index) => {
+            this.alertData.push({
+              protocol_type: item.protocol_type,
+              time: item.time,
+              message: JSON.stringify(item.message)
+            });
+          });
+        });
     },
     methods: {
       handleClose(done) {
@@ -350,7 +361,7 @@
         }
       },
       setting(message) {
-        console.log('设置成功or失败');
+        console.log('iec104', message);
       }
     }
   };

@@ -52,7 +52,7 @@
       监控 <span>(监控界面：每当设备收到不符合配置的数据包，信息将显示)</span>
     </nav>
     <div class="modbus-content">
-      <alert-info></alert-info>
+      <alert-info :alert-data="alertData" :protocol-type="modbus"></alert-info>
       <br>
     </div>
 
@@ -285,6 +285,7 @@
     },
     data() {
       return {
+        alertData: [],
         showForm: false,
         activeName: '1',
         fcodes: [],
@@ -296,7 +297,7 @@
         configForm: {
           connection: {
             ip: '127.0.0.1',
-            port: 8000
+            port: 8020
           },
           restrictions: []
         },
@@ -333,6 +334,16 @@
         }
         ;
       });
+      axios.get('/api/v1.0/alerts/modbus')
+        .then((res) => {
+          res.data.alerts.forEach((item, index) => {
+            this.alertData.push({
+              protocol_type: item.protocol_type,
+              time: item.time,
+              message: JSON.stringify(item.message)
+            });
+          });
+        });
     },
     methods: {
       handleClose(done) {
@@ -432,7 +443,7 @@
         }
       },
       setting(message) {
-        console.log('设置成功or失败');
+        console.log('modbus', message);
       }
     }
   };

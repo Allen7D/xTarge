@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column
                 sortable
-                prop="alert_type"
+                prop="protocol_type"
                 label="类型"
                 width="100">
         </el-table-column>
@@ -45,8 +45,8 @@
             axios.get('/api/v1.0/alerts')
               .then((res) => {
                   res.data.alerts.forEach((item, index) => {
-                      this.alertsDate.push({
-                          alert_type: item.alert_type,
+                      this.alertData.push({
+                          protocol_type: item.protocol_type,
                           time: item.time,
                           message: JSON.stringify(item.message)
                       });

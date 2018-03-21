@@ -9,6 +9,7 @@ import threading
 import socket
 from select import select
 import datetime
+import random
 
 import config
 from model import db
@@ -104,11 +105,21 @@ def api_get_alerts():
   data = db.get_alerts()
   return json.dumps(data), 200
 
+@app.route('/api/v1.0/alerts/<protocol_type>', methods=['GET'])
+def api_get_alerts_by_type(protocol_type):
+  data = db.get_alerts(protocol_type)
+  return json.dumps(data), 200
+
+@app.route('/api/v1.0/data', methods=['GET'])
+def api_get_data():
+  data = {'data': random.randint(100, 200)}
+  return json.dumps(data), 200
+
 def main_server(port=5000):
   socketio.run(app, host="0.0.0.0", port=port)
 
 
-def iec104_monitor_server(port=8000):
+def iec104_monitor_server(port=8010):
   s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
   s.bind(("0.0.0.0", port))
   s.listen(10)
@@ -141,7 +152,7 @@ def iec104_monitor_server(port=8000):
           socketio.emit("alert", alert_data)
 
 
-def modbus_monitor_server(port=8111):
+def modbus_monitor_server(port=8020):
   s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
   s.bind(("0.0.0.0", port))
   s.listen(10)

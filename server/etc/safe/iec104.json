@@ -1,16 +1,7 @@
 {
     "connection": {
         "ip": "127.0.0.1",
-        "port": 8000
+        "port": 8010
     },
-    "restrictions": [
-        {
-            "address": {
-                "ip": "123",
-                "mac": "1235667",
-                "default": false
-            },
-            "function_codes": []
-        }
-    ]
+    "restrictions": []
 }
