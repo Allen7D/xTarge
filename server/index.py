@@ -236,9 +236,9 @@ if __name__ == '__main__':
 
   Watcher()
 
-  t1 = threading.Thread(target=main_server, args=())
-  t2 = threading.Thread(target=iec104_monitor_server, args=())
-  t3 = threading.Thread(target=modbus_monitor_server, args=())
+  t1 = threading.Thread(target=main_server, name='main_server', args=())
+  t2 = threading.Thread(target=iec104_monitor_server, name='iec104_monitor_server', args=())
+  t3 = threading.Thread(target=modbus_monitor_server, name='modbus_monitor_server', args=())
 
   t1.start()
   t2.start()

@@ -74,6 +74,7 @@ def get_operationes():
       'user_id': op.get('user_id'),
       'username': op.get('user_name'),
       'time': op.get('time'),
+      'protocol_type': op.get('protocol_type'),
       'op': op.get('os')
     }
     op_list.append(op)
@@ -106,7 +107,7 @@ def get_alerts(protocol_type=None):
     alert_list.append(alert)
 
   if protocol_type:
-    alert_list = filter(lambda x: x['protocol_type'] == protocol_type, alert_list)
+    alert_list = [i for i in filter(lambda x: x['protocol_type'] == protocol_type, alert_list)]
   return {'alerts': alert_list}
 
 

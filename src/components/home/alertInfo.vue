@@ -19,8 +19,7 @@
         width="200">
       </el-table-column>
       <el-table-column
-        sortable
-        prop="alert_type"
+        prop="protocol_type"
         label="类型"
         width="100">
       </el-table-column>

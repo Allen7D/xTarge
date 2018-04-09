@@ -6,7 +6,7 @@
                 <h2>安全协议栈配置与监控界面</h2>
                 <ul>
                     <li>
-                        <router-link to="/admin/user">用户: {{username}}</router-link>
+                        <router-link to="/admin/user">用户: {{fullName}}</router-link>
                     </li>
                     <li><a @click="logout">退出</a></li>
                 </ul>
@@ -45,7 +45,10 @@
             }
         },
         computed: {
-            ...mapState(['isLogin', 'username'])
+            ...mapState(['isLogin']),
+            fullName () {
+                return this.$store.getters.fullName;
+            }
         },
         methods: {
             toIec104() {

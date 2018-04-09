@@ -249,16 +249,7 @@
           });
         });
       });
-      axios.get('/api/v1.0/alerts/iec104')
-        .then((res) => {
-          res.data.alerts.forEach((item, index) => {
-            this.alertData.push({
-              protocol_type: item.protocol_type,
-              time: item.time,
-              message: JSON.stringify(item.message)
-            });
-          });
-        });
+      setInterval(this.getAlertData, 3000);
     },
     methods: {
       handleClose(done) {
@@ -349,6 +340,19 @@
           });
         }
         this.fc_options.sort(sortByLabel);
+      },
+      getAlertData() {
+        this.alertData = [];
+        axios.get('/api/v1.0/alerts/iec104')
+          .then((res) => {
+            res.data.alerts.forEach((item, index) => {
+              this.alertData.push({
+                protocol_type: item.protocol_type,
+                time: item.time,
+                message: JSON.stringify(item.message)
+              });
+            });
+          });
       }
     },
     sockets: {

@@ -1,19 +1,13 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
 
-Vue.use(Vuex);
+import defaultState from './state/state';
+import mutations from './mutations/mutations';
+import getters from './getters/getters';
 
-export default new Vuex.Store({
-  state: {
-    username: localStorage['username'] || '',
-    isLogin: localStorage['isLogin'] === 'true'
-  },
-    mutations: {
-    updateUserInfo (state, username) {
-      state.username = username;
-    },
-    switchLogin(state, bool) {
-      state.isLogin = bool;
-    }
-  }
-});
+export default () => {
+  return new Vuex.Store({
+    state: defaultState,
+    mutations,
+    getters
+  });
+};

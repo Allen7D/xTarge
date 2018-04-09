@@ -66,13 +66,15 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).then((res) => {
-          console.log(res);
-          this.$store.commit('updateUserInfo', res.data.name);
+          console.log('登录', res);
+          this.$store.commit('updateUserInfo', res.data);
           this.$store.commit('switchLogin', true);
+
           localStorage['username'] = res.data.name;
           localStorage['level'] = res.data.level;
           localStorage['id'] = res.data._id;
           localStorage['isLogin'] = true;
+
           this.$router.push('/modbus');
         }).catch((err) => {
           console.log('登录错误', err);
