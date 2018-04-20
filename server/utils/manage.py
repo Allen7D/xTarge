@@ -3,7 +3,7 @@
 
 
 from flask_script import Manager
-from script.db_script import DBManager
+from server.script.db_script import DBManager
 from app import app
 
 def manage(app):

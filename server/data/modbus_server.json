@@ -1,51 +1,7 @@
 {
     "connection": {
-        "ip": "127.0.0.1",
-        "port": 8020
+        "ip": "127.0.0.113213",
+        "port": "123123"
     },
-    "restrictions": [
-        {
-            "address": {
-                "ip": "192.168.1.150",
-                "mac": "00-01-6C-06-A6-29",
-                "default": true
-            },
-            "function_codes": [
-                {
-                    "id": 1,
-                    "default": true,
-                    "excepts": [
-                        {
-                            "start": {
-                                "year": 2018,
-                                "mon": 3,
-                                "day": 30,
-                                "hour": 0,
-                                "min": 0,
-                                "sec": 0,
-                                "wday": -1
-                            },
-                            "end": {
-                                "year": 2018,
-                                "mon": 4,
-                                "day": 24,
-                                "hour": 0,
-                                "min": 0,
-                                "sec": 0,
-                                "wday": -1
-                            }
-                        }
-                    ]
-                }
-            ],
-            "memories": [
-                {
-                    "id": 1,
-                    "id2": 1,
-                    "default": true,
-                    "excepts": []
-                }
-            ]
-        }
-    ]
+    "restrictions": []
 }

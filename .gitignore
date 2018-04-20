@@ -2,6 +2,7 @@
 node_modules/
 /resource/
 /dist/
+/server/test/
 __pycache__/
 server/__pycache__/
 npm-debug.log*

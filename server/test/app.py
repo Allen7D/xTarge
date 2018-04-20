@@ -5,9 +5,8 @@ from flask import Flask, render_template, session, request,redirect,url_for,flas
 from flask_socketio import SocketIO, emit
 from flask_login import login_user, logout_user, login_required, current_user, LoginManager, UserMixin, AnonymousUserMixin
 from flask_cors import CORS
-from pymongo import MongoClient
-from func import *
-from utils.watcher import Watcher
+from .func import *
+from .utils.watcher import Watcher
 
 import json
 import threading
