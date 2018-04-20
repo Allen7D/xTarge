@@ -19,6 +19,6 @@ def copy_file(src, dst):
     cmd = "cp " + src+ " " + dst
     os.system(cmd)
 
-def deal_with_alert_data(data):
+def convert(data):
     data = [s.split("-") for s in data.split("|")]
     return dict(data)

@@ -10,9 +10,9 @@ from server.utils import util
 __author__ = 'Alimazing'
 
 iec104_json_path = "./server/data/iec104_server.json" # 所有操作和读取所涉及的路径，都是相对于targeman.py
-iec104_json_dst = "./server/etc/safe/iec104.json"
+iec104_json_dst = "/etc/safe/iec104.json"
 modbus_json_path = "./server/data/modbus_server.json"
-modbus_json_dst = "./server/etc/safe/modbus.json"
+modbus_json_dst = "/etc/safe/modbus.json"
 
 socketio = SocketIO()
 
