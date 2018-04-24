@@ -44,7 +44,7 @@
           <span style="margin-left: 10px">{{ scope.row.date }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200" label="编辑">
+      <el-table-column width="200" label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"

@@ -334,7 +334,7 @@
         }
         ;
       });
-      setInterval(this.getAlertData, 3000);
+      this.getAlertData();
     },
     methods: {
       handleClose(done) {
@@ -424,14 +424,13 @@
         this.fc_options.sort(sortByLabel);
       },
       getAlertData() {
-        this.alertData = [];
         axios.get('/api/v1.0/alerts/modbus')
           .then((res) => {
             res.data.alerts.forEach((item, index) => {
               this.alertData.push({
                 protocol_type: item.protocol_type,
                 time: item.time,
-                message: JSON.stringify(item.message)
+                message: item.message
               });
             });
           });
@@ -443,7 +442,11 @@
       },
       alert(message) {
         if (message['type'] === 'modbus') {
-          console.log(message);
+          this.alertData.push({
+            protocol_type: message['type'],
+            time: message['time'],
+            message: message['message']
+          });
         }
       },
       setting(message) {

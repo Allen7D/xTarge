@@ -16,8 +16,8 @@ class Alert:
     for alert in alerts:
       alert = {
         'time': alert.get('time'),
-        'protocol_type': alert.get('alert')['type'],
-        'message': alert.get('alert')['Message']
+        'protocol_type': alert.get('type'),
+        'message': alert.get('message')
       }
       alert_list.append(alert)
 

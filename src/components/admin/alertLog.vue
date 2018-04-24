@@ -48,7 +48,7 @@
             this.alertData.push({
               protocol_type: item.protocol_type,
               time: item.time,
-              message: JSON.stringify(item.message)
+              message: item.message
             });
           });
         });

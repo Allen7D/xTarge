@@ -65,11 +65,13 @@ def iec104_monitor_server(port=8010, protocol_type='iec104', socketio=None):
           time = now.strftime('%Y-%m-%d %H:%M:%S')
           if is_alert_or_cmnt == 'alert':
             ctx['type'] = protocol_type
-            MongoClient().safe_protocol.alert.insert({'alert': ctx, 'time': time})
-            socketio.emit("alert", ctx)
+            new_obj = {'message': ctx['Message'],'type': ctx['type'], 'time': time}
+            MongoClient().safe_protocol.alert.insert(new_obj)
+            socketio.emit("alert", new_obj)
           else:
+            new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'] ,'time': time}
             MongoClient().safe_protocol.cmnt.insert({'buffer': ctx['Buffer'], 'ip': ctx['client Ip'] ,'time': time})
-            socketio.emit("ctx", ctx)
+            socketio.emit("ctx", new_obj)
 
 
 
@@ -104,11 +106,13 @@ def modbus_monitor_server(port=8020, protocol_type='modbus', socketio=None):
           time = now.strftime('%Y-%m-%d %H:%M:%S')
           if is_alert_or_cmnt == 'alert':
             ctx['type'] = protocol_type
-            MongoClient().safe_protocol.alert.insert({'alert': ctx, 'time': time})
-            socketio.emit("alert", ctx)
+            new_obj = {'message': ctx['Message'],'type': ctx['type'], 'time': time}
+            MongoClient().safe_protocol.alert.insert(new_obj)
+            socketio.emit("alert", new_obj)
           else:
-            MongoClient().safe_protocol.cmnt.insert({'buffer': ctx['Buffer'], 'ip': ctx['client Ip'], 'time': time})
-            socketio.emit("ctx", ctx)
+            new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'] ,'time': time}
+            MongoClient().safe_protocol.cmnt.insert({'buffer': ctx['Buffer'], 'ip': ctx['client Ip'] ,'time': time})
+            socketio.emit("ctx", new_obj)
 
 
 def is_alert_or_cmnt(dict_data):

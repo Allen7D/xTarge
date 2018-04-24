@@ -59,20 +59,20 @@ def showOS():
 def initAlert():
   db_alert.drop()
   alerts = [
-    {"time": "2018-03-16 15:57:27", "alert": {"type": "iec104", "Message": "Access forbidden funcion code", "data": "1"}},
-    {"time": "2018-03-16 15:59:40", "alert": {"type": "modbus", "Message": "Access forbidden funcion code", "data": "1"}},
-    {"time": "2018-03-16 16:23:41", "alert": {"ip": "192.168.3.62", "Message": "Access forbidden ip&&mac ", "type": "modbus"}},
-    {"time": "2018-03-16 16:25:29", "alert": {"type": "iec104", "Message": "Access forbidden funcion code", "data": "3"}},
-    {"time": "2018-03-16 16:27:22", "alert": {"type": "iec104", "Message": "Access forbidden funcion code", "data": "3"}},
-    {"time": "2018-03-16 16:30:44", "alert": {"Message": "Access forbiddened memory area", "type": "modbus", "   19": "   37"}},
-    {"time": "2018-03-16 16:31:43", "alert": {"Message": "Access forbiddened memory area", "type": "modbus", "   19": "   37"}},
-    {"time": "2018-03-16 16:31:44", "alert": {"Message": "Access forbiddened memory area", "type": "modbus", "   19": "   37"}},
-    {"time": "2018-03-16 16:31:44", "alert": {"Message": "Access forbiddened memory area", "type": "modbus", "   19": "   37"}},
-    {"time": "2018-03-16 16:37:36", "alert": {"type": "iec104", "Message": "Access forbidden funcion code", "data": "4"}},
-    {"time": "2018-03-16 16:39:23", "alert": {"type": "modbus", "Message": "Access forbidden funcion code", "data": "5"}}
+    {"time": "2018-03-16 15:57:27", "type": "iec104", "Message": "Access forbidden funcion code", "data": "1"},
+    {"time": "2018-03-16 15:59:40", "type": "modbus", "Message": "Access forbidden funcion code", "data": "1"},
+    {"time": "2018-03-16 16:23:41", "type": "modbus", "Message": "Access forbidden ip&&mac ", "ip": "192.168.3.62"},
+    {"time": "2018-03-16 16:25:29", "type": "iec104", "Message": "Access forbidden funcion code", "data": "3"},
+    {"time": "2018-03-16 16:27:22", "type": "iec104", "Message": "Access forbidden funcion code", "data": "3"},
+    {"time": "2018-03-16 16:30:44", "type": "modbus", "Message": "Access forbiddened memory area", "   19": "   37"},
+    {"time": "2018-03-16 16:31:43", "type": "modbus", "Message": "Access forbiddened memory area", "   19": "   37"},
+    {"time": "2018-03-16 16:31:44", "type": "modbus", "Message": "Access forbiddened memory area", "   19": "   37"},
+    {"time": "2018-03-16 16:31:44", "type": "modbus", "Message": "Access forbiddened memory area", "   19": "   37"},
+    {"time": "2018-03-16 16:37:36", "type": "iec104", "Message": "Access forbidden funcion code", "data": "4"},
+    {"time": "2018-03-16 16:39:23", "type": "modbus", "Message": "Access forbidden funcion code", "data": "5"}
   ]
   for alert in alerts:
     db_alert.insert(
-      {'time': alert['time'], 'alert': alert['alert']})
+      {'time': alert['time'], 'type': alert['type'], 'message': alert['Message']})
 
   print('数据库：alert信息初始化完成！')

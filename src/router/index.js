@@ -30,36 +30,24 @@ const routes = [{
   path: '/',
   name: 'Admin',
   component: Admin,
-  children: [{
-    path: '/admin/user',
-    component: User
-  }, {
-    path: '/admin/oplog',
-    component: OpLog
-  }, {
-    path: '/admin/alertlog',
-    component: AlertLog
-  }
+  children: [
+    { path: '/admin/user', component: User },
+    { path: '/admin/oplog', component: OpLog },
+    { path: '/admin/alertlog', component: AlertLog }
   ]
 }, {
   path: '/',
   name: 'Home',
   component: Home,
   children: [
-    {
-      path: '/modbus',
-      component: Modbus
-    }, {
-      path: '/iec104',
-      component: Iec104
-    }
+    { path: '/modbus', component: Modbus },
+    { path: '/iec104', component: Iec104 }
   ]
 }, {
   path: '/test',
   name: 'Test',
   component: Test
-}
-];
+}];
 
 export default new Router({
   linkActiveClass: 'active',
