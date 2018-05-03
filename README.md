@@ -38,11 +38,11 @@
 
 1.在一定目录下（比如/usr/local/safe/）: 
 
-	$ git clone https://github.com/bodanli159951/safe-protocol
+	$ git clone https://github.com/bodanli159951/xTarge
 
 2.前端:
 
-	(1)$ cd /usr/local/safe/safe-protocol/
+	(1)$ cd /usr/local/safe/xTarge/
 
 	(2)$ npm install
 
@@ -54,7 +54,7 @@
 
 3.后端:
 
-	(1)$ cd /usr/local/safe/safe-protocol/
+	(1)$ cd /usr/local/safe/xTarge/
 
 	(2)$ sudo apt-get install pip
 
@@ -64,5 +64,5 @@
 
 	(5)$ python manage.py db showUser
 
-	(6)$ sudo python targeman.py
+	(6)$ sudo python targe.py
 
