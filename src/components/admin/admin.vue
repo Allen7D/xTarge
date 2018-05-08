@@ -38,7 +38,7 @@
 
             <el-container>
                 <el-header>
-                    <user-header :title="title"></user-header>
+                    <user-header></user-header>
                 </el-header>
                 <el-main>
                     <keep-alive>
@@ -51,7 +51,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import header2 from 'components/header/header2.vue';
+    import header2 from 'components/header/header.vue';
     import user from './user';
     import alertLog from './alertLog';
     import opLog from './opLog';
@@ -69,10 +69,6 @@
         },
         data() {
             return {
-                title: {
-                    h1: '用户管理',
-                    h2: '用户列表'
-                }
             };
         },
         computed: {
@@ -86,18 +82,12 @@
         },
         methods: {
             userOpen() {
-                this.title.h1 = '用户管理';
-                this.title.h2 = '用户列表';
                 this.$router.push({path: '/admin/user'});
             },
             opLogOpen() {
-                this.title.h1 = '日志管理';
-                this.title.h2 = '操作日志';
                 this.$router.push({path: '/admin/oplog'});
             },
             alertLogOpen() {
-                this.title.h1 = '日志管理';
-                this.title.h2 = '报警日志';
                 this.$router.push({path: '/admin/alertlog'});
             },
             handleOpen(key, keyPath) {

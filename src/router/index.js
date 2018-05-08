@@ -28,12 +28,18 @@ const routes = [{
   alias: '/'
 }, {
   path: '/',
-  name: 'Admin',
+  name: '日志管理',
   component: Admin,
   children: [
-    { path: '/admin/user', component: User },
-    { path: '/admin/oplog', component: OpLog },
-    { path: '/admin/alertlog', component: AlertLog }
+    { path: '/admin/oplog', component: OpLog, name: '操作日志' },
+    { path: '/admin/alertlog', component: AlertLog, name: '报警日志' }
+  ]
+}, {
+  path: '/',
+  name: '用户管理',
+  component: Admin,
+  children: [
+    { path: '/admin/user', component: User, name: '用户列表' }
   ]
 }, {
   path: '/',
