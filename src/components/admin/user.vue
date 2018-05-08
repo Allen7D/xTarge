@@ -8,6 +8,7 @@
       :data="userList"
       tooltip-effect="dark"
       style="width: 1000px"
+      height="800"
       border
       @selection-change="handleSelectionChange">
       <el-table-column
@@ -304,6 +305,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   .user
+    width: 100%
     .el-button
       margin-bottom: 10px
 
