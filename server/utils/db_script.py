@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from flask_script import Manager
 import time
 
-from server.model import db_user, db_op, db_alert
+from server.model import db_user, db_op, db_alert, db_cmnt
 
 LEVEL1, LEVEL2, LEVEL3 = 'A', 'B', 'C'
 register_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -76,3 +76,22 @@ def initAlert():
       {'time': alert['time'], 'type': alert['type'], 'message': alert['message']})
 
   print('数据库：alert信息初始化完成！')
+
+
+
+
+@DBManager.command
+def initCmnt():
+  db_cmnt.drop()
+  cmnts = [
+    {"buffer" : "<00><02><00><00><00><06><FF><03><01><30><00><01>", "ip" : "192.168.3.148", "time" : "2018-05-05 13:31:36" },
+    {"buffer" : "<00><02><00><00><00><06><FF><03><01><30><00><01>", "ip" : "192.168.3.148", "time" : "2018-05-06 13:34:08" },
+    {"buffer" : "<00><02><00><00><00><06><FF><03><01><30><00><01>", "ip" : "192.168.3.148", "time" : "2018-05-07 13:34:44" },
+    {"buffer" : "<00><02><00><00><00><06><FF><03><01><30><00><01>", "ip" : "192.168.3.148", "time" : "2018-05-08 15:32:49" }
+  ]
+  for cmnt in cmnts:
+    db_cmnt.insert(
+      {'time': cmnt['time'], 'buffer': cmnt['buffer'], 'ip': cmnt['ip']})
+
+  print('数据库：cmnt信息初始化完成！')
+

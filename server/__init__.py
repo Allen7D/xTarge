@@ -115,3 +115,41 @@ def modbus_monitor_server(port=8020, type='modbus', socketio=None):
                         new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'], 'time': time}
                         socketio.emit("ctx", new_obj)
                         MongoClient().safe_protocol.cmnt.insert(new_obj)
+
+
+def monitor_server(port, type, socketio):
+    s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+    s.bind(("0.0.0.0", port))
+    s.listen(10)
+    s.setblocking(False)
+    inputs = []
+    inputs.append(s)
+    address = dict()
+
+    while 1:
+        rs, ws, es = select(inputs, [], [], 1)
+        for r in rs:
+            if r is s:
+                conn, addr = s.accept()
+                print("Client {0} connected !".format(addr))
+                address[conn] = addr
+                inputs.append(conn)
+            else:
+                data = r.recv(1024)
+                if not data:
+                    print("Client {0} disconnected !".format(address[r]))
+                    address.pop(r)
+                    inputs.remove(r)
+                else:
+                    ctx = util.convert(data.strip())
+                    now = datetime.datetime.now()
+                    time = now.strftime('%Y-%m-%d %H:%M:%S')
+                    alert_or_cmnt = is_alert_or_cmnt(ctx)
+                    if alert_or_cmnt == 'alert':
+                        new_obj = {'type': type, 'message': ctx['Message'], 'time': time}
+                        socketio.emit("alert", new_obj)
+                        MongoClient().safe_protocol.alert.insert(new_obj)
+                    else:
+                        new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'], 'time': time}
+                        socketio.emit("ctx", new_obj)
+                        MongoClient().safe_protocol.cmnt.insert(new_obj)
