@@ -38,9 +38,9 @@
         data() {
             return {
                 activeNames: '1'
-            };
+            }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

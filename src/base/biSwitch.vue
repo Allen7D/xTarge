@@ -14,9 +14,9 @@
         data() {
             return {
                 value: true
-            };
+            }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

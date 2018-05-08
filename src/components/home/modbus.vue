@@ -78,7 +78,7 @@
 
         <div class="restrictions border-2px" v-if="this.configForm.restrictions">
           <h2>限制项</h2>
-          <div class="restriction border-2px" v-for="(restriction, rIndex) in this.configForm.restrictions">
+          <div class="restriction border-2px" v-for="(restriction, rIndex) in this.configForm.restrictions" :key="rIndex">
             <h3>限制项 {{rIndex + 1}}</h3>
             <div style="margin-left: 30px; margin-top: 15px;">
               <el-input placeholder="请输入内容" v-model="restriction.address.ip" disabled>
@@ -214,7 +214,7 @@
                     </template>
 
                     <el-form
-                      v-for="(memory, index) in restriction.memories"
+                      v-for="memory in restriction.memories"
                       :key="memory.key"
                     >
                       <el-container class="border-2px">
@@ -271,11 +271,11 @@
 </template>
 
 <script>
-  import connection from 'components/connection/connection';
-  import alertInfo from './alertInfo';
-  import mLimit from './mLimit';
-  import {sortByLabel, removeByValue} from 'common/js/util';
-  import axios from 'axios';
+  import connection from 'components/connection/connection'
+  import alertInfo from './alertInfo'
+  import mLimit from './mLimit'
+  import {sortByLabel, removeByValue} from 'common/js/util'
+  import axios from 'axios'
 
   export default {
     components: {
@@ -302,48 +302,45 @@
           restrictions: []
         },
         filterMethod(query, item) {
-          return item.seq.indexOf(query) > -1;
+          return item.seq.indexOf(query) > -1
         }
-      };
+      }
     },
     created() {
       this.$http.get('/api/modbus').then((response) => {
-        this.modbus_data = response.body.data;
-        this.modbus_0 = this.modbus_data['function_code']['appendable'];
-        this.modbus_1 = this.modbus_data['function_code']['appended'];
-        this.modbus_m = this.modbus_data['memory'];
+        this.modbus_data = response.body.data
+        this.modbus_0 = this.modbus_data['function_code']['appendable']
+        this.modbus_1 = this.modbus_data['function_code']['appended']
+        this.modbus_m = this.modbus_data['memory']
 
         for (let i in this.modbus_1) {
-          this.fc_options.push({'value': parseInt(i.split(' ')[0]), 'label': i});
+          this.fc_options.push({'value': parseInt(i.split(' ')[0]), 'label': i})
         }
-        ;
+
         for (let j in this.modbus_0) {
-          this.fcodes.push(j);
+          this.fcodes.push(j)
         }
-        ;
+
         this.fcodes.forEach((fcode, index) => {
           this.fc_ad_data.push({
             label: fcode,
             key: index,
             seq: this.fcodes[index].split(' ')[0]
-          });
-        });
-
+          })
+        })
         for (let k in this.modbus_m) {
-          this.m_options.push({'value': this.modbus_m[k], 'label': k});
+          this.m_options.push({'value': this.modbus_m[k], 'label': k})
         }
-        ;
-      });
-      this.getAlertData();
+      })
+      this.getAlertData()
     },
     methods: {
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });
+            done()
+          }).catch(
+            _ => {})
       },
       verifyForm() {
         this.$alert('<strong>是否 <i>确定</i> 验证</strong>', 'Modbus 配置验证', {
@@ -353,15 +350,15 @@
               this.$message({
                 message: '验证成功!',
                 type: 'success'
-              });
+              })
             } else if (action === 'cancel') {
               this.$message({
                 message: '验证取消!',
                 type: 'info'
-              });
+              })
             }
           }
-        });
+        })
       },
       submitForm() {
         this.$confirm('此操作将修改Modbus的配置文件, 是否继续?', '提示', {
@@ -374,27 +371,28 @@
             'type': 'modbus',
             'user_name': localStorage['username'],
             'user_id': localStorage['id']
-          });
-        let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&op=${JSON.stringify(this.configForm, null)}`;
+          })
+        let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&op=${JSON.stringify(this.configForm, null)}`
+
         axios.post('/api/v1.0/ops', postData, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).then(res => {
-          console.log(res);
-        this.$message({
-          type: 'success',
-          message: '发送成功!'
-        });
-      }).catch(err => {
-          console.error(err);
-      });
-      }).catch(() => {
+          this.$message({
+            type: 'success',
+            message: '发送成功!'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+      .catch(() => {
           this.$message({
           type: 'info',
           message: '已取消发送!'
-        });
-      });
+        })
+      })
       },
       handleChange(value, direction, movedKeys) {
         if (direction === 'right') {
@@ -404,24 +402,24 @@
                 'value': parseInt(this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0]),
                 'label': this.fc_ad_data[movedKeys[i]]['label']
               }
-            );
+            )
           }
           this.$notify({
             title: '添加',
             message: '提示消息：添加成功',
             type: 'success'
-          });
+          })
         } else {
           for (let i in movedKeys) {
-            removeByValue(this.fc_options, this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0]);
+            removeByValue(this.fc_options, this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0])
           }
           this.$notify({
             title: '删除',
             message: '提示消息：删除成功',
             type: 'success'
-          });
+          })
         }
-        this.fc_options.sort(sortByLabel);
+        this.fc_options.sort(sortByLabel)
       },
       getAlertData() {
         axios.get('/api/v1.0/alerts/modbus')
@@ -431,14 +429,14 @@
                 protocol_type: item.protocol_type,
                 time: item.time,
                 message: item.message
-              });
-            });
-          });
+              })
+            })
+          })
       }
     },
     sockets: {
       connect() {
-        this.$socket.emit('my_event', {data: 'I\'m connected!'});
+        this.$socket.emit('my_event', {data: 'I\'m connected!'})
       },
       alert(message) {
         if (message['type'] === 'modbus') {
@@ -446,14 +444,14 @@
             protocol_type: message['type'],
             time: message['time'],
             message: message['message']
-          });
+          })
         }
       },
       setting(message) {
-        console.log('modbus', message);
+        console.log('modbus', message)
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

@@ -1,6 +1,6 @@
 <template>
     <!--
-        组件中value:label对应对象中的key:value;
+        组件中value:label对应对象中的key:value
         「默认值local_value」是基于value值去对应label显示
     -->
     <el-select v-model="local_value" placeholder="请选择">
@@ -27,15 +27,15 @@
         data() {
             return {
                 local_value: this.remote_value
-            };
+            }
         },
         watch: {
             local_value(val) {
-                console.log(this.local_value, this.remote_value);
-                this.$emit('update:remote_value', val);
+                console.log(this.local_value, this.remote_value)
+                this.$emit('update:remote_value', val)
             }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

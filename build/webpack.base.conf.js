@@ -23,10 +23,11 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'src': path.resolve(__dirname, '../src'),
-      'base': path.resolve(__dirname, '../src/base'),
-      'common': path.resolve(__dirname, '../src/common'),
-      'components': path.resolve(__dirname, '../src/components')
+      'src': resolve('src'),
+      'base': resolve('src/base'),
+      'common': resolve('src/common'),
+      'components': resolve('src/components'),
+      'views': resolve('src/views')
     }
   },
   module: {

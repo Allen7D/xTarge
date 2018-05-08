@@ -16,15 +16,15 @@
         data() {
             return {
                 local_value: this.remote_value
-            };
+            }
         },
         watch: {
             local_value(val) {
-                console.log(this.local_value, this.remote_value);
-                this.$emit('update:remote_value', val);
+                console.log(this.local_value, this.remote_value)
+                this.$emit('update:remote_value', val)
             }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

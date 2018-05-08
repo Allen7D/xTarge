@@ -72,8 +72,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import memoryLimit from 'components/limit/memoryLimit';
-    import functionCodeLimit from 'components/limit/functionCodeLimit';
+    import memoryLimit from 'components/limit/memoryLimit'
+    import functionCodeLimit from 'components/limit/functionCodeLimit'
 
     export default {
         components: {
@@ -96,7 +96,7 @@
                 checkList: [],
                 activeNames: '1',
                 removeBtnType: ''
-            };
+            }
         },
         methods: {
             addRestriction(arr) {
@@ -110,25 +110,25 @@
                     ],
                     memories: [
                     ]
-                });
+                })
             },
             remoteRestriction(arr) {
                 for (let i in this.checkList) {
-                    arr.splice(this.checkList[i], 1);
+                    arr.splice(this.checkList[i], 1)
                 }
-                this.checkList.splice(0);
+                this.checkList.splice(0)
             }
         },
         watch: {
             checkList(val, oldVal) {
                 if (val.length !== 0) {
-                    this.removeBtnType = 'danger';
+                    this.removeBtnType = 'danger'
                 } else {
-                    this.removeBtnType = '';
+                    this.removeBtnType = ''
                 }
             }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

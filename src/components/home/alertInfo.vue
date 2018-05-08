@@ -43,16 +43,16 @@
       }
     },
     data() {
-      return {};
+      return {}
     },
     sockets: {
       alert(message) {
         if (message['type'] === this.protocolType) {
-          console.log(message);
+          console.log(message)
         }
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

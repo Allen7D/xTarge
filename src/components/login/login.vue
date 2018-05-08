@@ -20,25 +20,25 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapState} from 'vuex';
+  import {mapState} from 'vuex'
 
-  import axios from 'axios';
+  import axios from 'axios'
   export default {
     data() {
       var checkUsername = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error('用户名不能为空'));
+          return callback(new Error('用户名不能为空'))
         } else {
-          callback();
+          callback()
         }
-      };
+      }
       var validatePass = (rule, value, callback) => {
         if (value === '') {
-          return callback(new Error('请输入密码'));
+          return callback(new Error('请输入密码'))
         } else {
-          callback();
+          callback()
         }
-      };
+      }
       return {
         ruleForm: {
           username: '',
@@ -53,40 +53,42 @@
           ]
 
         }
-      };
+      }
     },
     computed: {
       ...mapState(['isLogin'])
     },
     methods: {
+      handleLoginError() {
+        this.$notify.error({
+          title: '错误',
+          message: '账号密码错误'
+        })
+        this.$router.push('/login')
+      },
       submitForm(formName) {
-        let postData = 'username=' + this.ruleForm.username + '&password=' + this.ruleForm.pass;
+        let postData = 'username=' + this.ruleForm.username + '&password=' + this.ruleForm.pass
         axios.post('http://127.0.0.1:5000/login', postData, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).then((res) => {
-          console.log('登录', res);
-          this.$store.commit('updateUserInfo', res.data);
-          this.$store.commit('switchLogin', true);
+          console.log('登录', res)
+          this.$store.commit('updateUserInfo', res.data)
+          this.$store.commit('switchLogin', true)
 
-          localStorage['username'] = res.data.name;
-          localStorage['level'] = res.data.level;
-          localStorage['id'] = res.data._id;
-          localStorage['isLogin'] = true;
+          localStorage['username'] = res.data.name
+          localStorage['level'] = res.data.level
+          localStorage['id'] = res.data._id
+          localStorage['isLogin'] = true
 
-          this.$router.push('/modbus');
-        }).catch((err) => {
-          console.log('登录错误', err);
-          this.$notify.error({
-            title: '错误',
-            message: '账号密码错误'
-          });
-          this.$router.push('/login');
-        });
+          this.$router.push('/modbus')
+        }).catch(() => {
+          this.handleLoginError()
+        })
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

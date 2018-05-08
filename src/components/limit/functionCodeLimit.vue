@@ -74,9 +74,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import selection from 'base/selection';
-    import uniSwitch from 'base/uniSwitch';
-    import dateTimePicker from 'base/dateTimePicker';
+    import selection from 'base/selection'
+    import uniSwitch from 'base/uniSwitch'
+    import dateTimePicker from 'base/dateTimePicker'
 
     export default {
         components: {
@@ -113,23 +113,23 @@
                         sec: -1,
                         wday: -1
                     }
-                });
+                })
             },
             addFunctionCode(arr) {
                 arr.push({
                     id: 1,
                     default: true,
                     excepts: []
-                });
+                })
             },
             removeArray(arr, item) {
-                var index = arr.indexOf(item);
+                var index = arr.indexOf(item)
                 if (index !== -1) {
-                    arr.splice(index, 1);
+                    arr.splice(index, 1)
                 }
             }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

@@ -22,7 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapState} from 'vuex';
+  import {mapState} from 'vuex'
   export default {
     data() {
       return {
@@ -31,60 +31,60 @@
         isModbus: true,
         tt: 190,
         isAdmin: true
-      };
+      }
     },
     mounted () {
       if (this.$route.path === '/iec104') {
-        this.isIec104 = true;
-        this.isModbus = false;
-        this.protocol = 'IEC104';
-        this.tt = 45;
-        this.isAdmin = false;
+        this.isIec104 = true
+        this.isModbus = false
+        this.protocol = 'IEC104'
+        this.tt = 45
+        this.isAdmin = false
       } else if (this.$route.path === '/modbus') {
-        this.isAdmin = false;
-        this.tt = 170;
+        this.isAdmin = false
+        this.tt = 170
       } else {
-        this.isAdmin = true;
+        this.isAdmin = true
       }
     },
     computed: {
       ...mapState(['isLogin']),
       fullName () {
-        return this.$store.getters.fullName;
+        return this.$store.getters.fullName
       }
     },
     methods: {
       toIec104() {
-        this.$router.push('/iec104');
+        this.$router.push('/iec104')
       },
       toModbus() {
-        this.$router.push('/modbus');
+        this.$router.push('/modbus')
       },
       logout() {
-        localStorage['username'] = '';
-        localStorage['isLogin'] = false;
-        localStorage['level'] = '';
+        localStorage['username'] = ''
+        localStorage['isLogin'] = false
+        localStorage['level'] = ''
 
-        this.$router.push('/login');
+        this.$router.push('/login')
       },
       modifyTitle() {
         if (this.$route.path === '/iec104') {
-          this.isIec104 = true;
-          this.isModbus = false;
-          this.protocol = 'IEC104';
-          this.tt = 45;
+          this.isIec104 = true
+          this.isModbus = false
+          this.protocol = 'IEC104'
+          this.tt = 45
         } else {
-          this.isIec104 = false;
-          this.isModbus = true;
-          this.protocol = 'Modbus';
-          this.tt = 170;
+          this.isIec104 = false
+          this.isModbus = true
+          this.protocol = 'Modbus'
+          this.tt = 170
         }
       }
     },
     watch: {
       '$route': 'modifyTitle'
     }
-  };
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -106,7 +106,7 @@
         text-indent: 1rem
         margin-right: 270px
       ul
-        float: right;
+        float: right
         margin: -2rem 2rem
         li
           display: inline-block

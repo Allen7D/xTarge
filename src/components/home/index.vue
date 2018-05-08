@@ -8,11 +8,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import header from 'components/header/header.vue';
-    import iec104 from './iec104.vue';
-    import modbus from './modbus.vue';
+    import header from 'components/header/header.vue'
+    import iec104 from './iec104.vue'
+    import modbus from './modbus.vue'
 
-    import {mapState} from 'vuex';
+    import {mapState} from 'vuex'
 
     export default {
         components: {
@@ -26,10 +26,10 @@
         created() {
             // 如果已经登陆了，则进入协议栈页面
             if (!this.isLogin) {
-                this.$router.push('/login');
+                this.$router.push('/login')
             }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

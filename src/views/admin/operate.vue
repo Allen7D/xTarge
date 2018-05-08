@@ -21,7 +21,7 @@
 
           <div class="restrictions border-2px" v-if="this.currentOp.restrictions">
             <h2>限制项</h2>
-            <div class="restriction border-2px" v-for="(restriction, rIndex) in this.currentOp.restrictions">
+            <div class="restriction border-2px" v-for="(restriction, rIndex) in this.currentOp.restrictions" :key="rIndex">
               <h3>限制项 {{rIndex + 1}}</h3>
               <div style="margin-left: 30px; margin-top: 15px;">
                 <el-input placeholder="请输入内容" v-model="restriction.address.ip" disabled>
@@ -158,7 +158,7 @@
                       </template>
 
                       <el-form
-                        v-for="(memory, index) in restriction.memories"
+                        v-for="memory in restriction.memories"
                         :key="memory.key"
                       >
                         <el-container class="border-2px">
@@ -258,7 +258,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import axios from 'axios'
   export default {
     data() {
       return {
@@ -267,7 +267,7 @@
         currentOp: {},
         fc_options: [],
         m_options: []
-      };
+      }
     },
     created() {
       axios.get('/api/v1.0/ops')
@@ -279,22 +279,22 @@
               time: item.time,
               protocol_type: item.protocol_type || '未知',
               op: JSON.stringify(item.op)
-            });
-          });
-        });
+            })
+          })
+        })
     },
     methods: {
       showOp(index, row) {
-        let data = JSON.parse(row.op);
+        let data = JSON.parse(row.op)
         if (typeof data === 'string') {
-          data = JSON.parse(data);
+          data = JSON.parse(data)
         }
-        console.log(data);
-        this.currentOp = data;
-        this.dialogVisible = true;
+        console.log(data)
+        this.currentOp = data
+        this.dialogVisible = true
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -320,6 +320,4 @@
                 padding: 0 5px
     .el-input
       width: 300px
-
-
 </style>

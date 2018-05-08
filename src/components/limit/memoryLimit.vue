@@ -8,10 +8,7 @@
                     </nav>
                 </template>
 
-                <el-form
-                        v-for="(memory, index) in memories"
-                        :key="memory.key"
-                >
+                <el-form v-for="memory in memories" :key="memory.key">
                     <el-container>
                         <el-main>
                             <el-form-item :inline="true">
@@ -83,8 +80,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import selection from 'base/selection.vue';
-    import uniSwitch from 'base/uniSwitch';
+    import selection from 'base/selection.vue'
+    import uniSwitch from 'base/uniSwitch'
     export default {
         components: {
             'v-selection': selection,
@@ -106,7 +103,7 @@
                 arr.push({
                     start: '',
                     end: ''
-                });
+                })
             },
             addMemory(arr) {
                 arr.push({
@@ -115,16 +112,16 @@
                     default: true,
                     excepts: [
                     ]
-                });
+                })
             },
             removeArray(arr, item) {
-                var index = arr.indexOf(item);
+                var index = arr.indexOf(item)
                 if (index !== -1) {
-                    arr.splice(index, 1);
+                    arr.splice(index, 1)
                 }
             }
         }
-    };
+    }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

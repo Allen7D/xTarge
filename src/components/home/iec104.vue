@@ -56,7 +56,7 @@
 
         <div class="restrictions border-2px" v-if="this.configForm.restrictions">
           <h2>限制项</h2>
-          <div class="restriction border-2px" v-for="(restriction, rIndex) in this.configForm.restrictions">
+          <div class="restriction border-2px" v-for="(restriction, rIndex) in this.configForm.restrictions" :key="rIndex">
             <h3>限制项 {{rIndex + 1}}</h3>
             <div style="margin-left: 30px; margin-top: 15px;">
               <el-input placeholder="请输入内容" v-model="restriction.address.ip" disabled>
@@ -197,12 +197,12 @@
 </template>
 
 <script>
-  import functionCodeLimit from 'components/limit/functionCodeLimit';
-  import iec104Limit from 'components/home/iLimit';
-  import connection from 'components/connection/connection';
-  import alertInfo from './alertInfo';
-  import {sortByLabel, removeByValue} from 'common/js/util';
-  import axios from 'axios';
+  import functionCodeLimit from 'components/limit/functionCodeLimit'
+  import iec104Limit from 'components/home/iLimit'
+  import connection from 'components/connection/connection'
+  import alertInfo from './alertInfo'
+  import {sortByLabel, removeByValue} from 'common/js/util'
+  import axios from 'axios'
 
   export default {
     components: {
@@ -229,36 +229,36 @@
           restrictions: []
         },
         filterMethod(query, item) {
-          return item.seq.indexOf(query) > -1;
+          return item.seq.indexOf(query) > -1
         }
-      };
+      }
     },
     created() {
       this.$http.get('/api/iec104').then((response) => {
-        this.iec104_data = response.body.data;
-        this.iec104 = this.iec104_data['function_code'];
+        this.iec104_data = response.body.data
+        this.iec104 = this.iec104_data['function_code']
 
         for (let i in this.iec104) {
-          this.fc_options.push({'value': parseInt(i.split(' ')[0]), 'label': i});
-        };
+          this.fc_options.push({'value': parseInt(i.split(' ')[0]), 'label': i})
+        }
         this.fcodes.forEach((fcode, index) => {
           this.fc_ad_data.push({
             label: fcode,
             key: index,
             seq: this.fcodes[index].split(' ')[0]
-          });
-        });
-      });
-      this.getAlertData();
+          })
+        })
+      })
+      this.getAlertData()
     },
     methods: {
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
-            done();
+            done()
           })
           .catch(_ => {
-          });
+          })
       },
       verifyForm() {
         this.$alert('<strong>是否 <i>确定</i> 验证</strong>', 'IEC104 配置验证', {
@@ -268,15 +268,15 @@
               this.$message({
                 message: '验证成功!',
                 type: 'success'
-              });
+              })
             } else if (action === 'cancel') {
               this.$message({
                 message: '验证取消!',
                 type: 'info'
-              });
+              })
             }
           }
-        });
+        })
       },
       submitForm() {
         this.$confirm('此操作将修改IEC104的配置文件, 是否继续?', '提示', {
@@ -289,30 +289,30 @@
             'type': 'iec104',
             'user_name': localStorage['username'],
             'user_id': localStorage['id']
-          });
-          let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=iec104&op=${JSON.stringify(this.configForm, null)}`;
+          })
+          let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=iec104&op=${JSON.stringify(this.configForm, null)}`
           axios.post('/api/v1.0/ops', postData, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             }
           }).then(res => {
-            console.log(res);
+            console.log(res)
             this.$message({
               type: 'success',
               message: '发送成功!'
-            });
+            })
           }).catch(err => {
-            console.error(err);
-          });
+            console.error(err)
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消发送!'
-          });
-        });
+          })
+        })
       },
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        this.$refs[formName].resetFields()
       },
       handleChange(value, direction, movedKeys) {
         if (direction === 'right') {
@@ -322,27 +322,27 @@
                 'value': parseInt(this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0]),
                 'label': this.fc_ad_data[movedKeys[i]]['label']
               }
-            );
+            )
           }
           this.$notify({
             title: '添加',
             message: '提示消息：添加成功',
             type: 'success'
-          });
+          })
         } else {
           for (let i in movedKeys) {
-            removeByValue(this.fc_options, this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0]);
+            removeByValue(this.fc_options, this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0])
           }
           this.$notify({
             title: '删除',
             message: '提示消息：删除成功',
             type: 'success'
-          });
+          })
         }
-        this.fc_options.sort(sortByLabel);
+        this.fc_options.sort(sortByLabel)
       },
       getAlertData() {
-//        this.alertData = [];
+//        this.alertData = []
         axios.get('/api/v1.0/alerts/iec104')
           .then((res) => {
             res.data.alerts.forEach((item, index) => {
@@ -350,30 +350,30 @@
                 protocol_type: item.protocol_type,
                 time: item.time,
                 message: item.message
-              });
-            });
-          });
+              })
+            })
+          })
       }
     },
     sockets: {
       connect() {
-        this.$socket.emit('my_event', {data: 'I\'m connected!'});
+        this.$socket.emit('my_event', {data: 'I\'m connected!'})
       },
       alert(message) {
         if (message['type'] === 'iec104') {
-          console.log(message);
+          console.log(message)
           this.alertData.push({
             protocol_type: message['type'],
             time: message['time'],
             message: message['message']
-          });
+          })
         }
       },
       setting(message) {
-        console.log('iec104', message);
+        console.log('iec104', message)
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -383,7 +383,7 @@
     .iec104-content
       margin-bottom: 20px
       border: 1px solid #333
-      border-radius: 0 0 5px 5px;
+      border-radius: 0 0 5px 5px
     .el-transfer
       width: 1000px
       .el-transfer-panel
@@ -398,23 +398,23 @@
     .el-container
       margin: 10px 20px
       .el-aside
-        background-color: #E9EEF3;
-        color: #333;
-        text-align: right;
-        line-height: 200px;
+        background-color: #E9EEF3
+        color: #333
+        text-align: right
+        line-height: 200px
       .el-main
-        background-color: #E9EEF3;
-        color: #333;
-        text-align: left;
-        border-radius: 5px;
+        background-color: #E9EEF3
+        color: #333
+        text-align: left
+        border-radius: 5px
 
     .el-footer
       margin: 5px 20px
-      background-color: #B3C0D1;
-      color: #333;
-      text-align: center;
-      line-height: 55px;
-      border-radius: 5px;
+      background-color: #B3C0D1
+      color: #333
+      text-align: center
+      line-height: 55px
+      border-radius: 5px
 
     .title
       line-height: 4rem
@@ -432,7 +432,7 @@
         font-size: 3rem
     .command
       margin: 1rem 1.5rem 0
-      border-top: 1px solid rgb(14, 32, 108);
+      border-top: 1px solid rgb(14, 32, 108)
       button
         margin: 1rem auto
         padding: 0.5rem 2rem
