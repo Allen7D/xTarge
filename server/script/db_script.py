@@ -61,7 +61,7 @@ def initAlert():
   alerts = [
     {"time": "2018-03-16 15:57:27", "type": "iec104", "message": "Access forbidden funcion code"},
     {"time": "2018-03-16 15:59:40", "type": "modbus", "message": "Access forbidden funcion code"},
-    {"time": "2018-03-16 16:23:41", "type": "modbus", "message": "Access forbidden ip&&mac "},
+    {"time": "2018-03-16 16:23:41", "type": "modbus", "message": "Access forbidden ip&&mac"},
     {"time": "2018-03-16 16:25:29", "type": "iec104", "message": "Access forbidden funcion code"},
     {"time": "2018-03-16 16:27:22", "type": "iec104", "message": "Access forbidden funcion code"},
     {"time": "2018-03-16 16:30:44", "type": "modbus", "message": "Access forbiddened memory area"},

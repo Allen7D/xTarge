@@ -26,10 +26,12 @@ app.config.from_object(config)
 cors = CORS(app, resources={"/*": {"origins": "*"}})
 socketio = SocketIO(app, async_mode="threading")
 
+
 def is_alert_or_cmnt(dict_data):
-    if 'Buffer' in dict_data:
-        return 'cmnt'
-    return 'alert'
+  if 'Buffer' in dict_data:
+    return 'cmnt'
+  return 'alert'
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -104,20 +106,24 @@ def api_post_ops():
 
   return json.dumps({}), 200
 
+
 @app.route('/api/v1.0/alerts', methods=['GET'])
 def api_get_alerts():
   data = db.get_alerts()
   return json.dumps(data), 200
+
 
 @app.route('/api/v1.0/alerts/<protocol_type>', methods=['GET'])
 def api_get_alerts_by_type(protocol_type):
   data = db.get_alerts(protocol_type)
   return json.dumps(data), 200
 
+
 @app.route('/api/v1.0/data', methods=['GET'])
 def api_get_data():
   data = {'data': random.randint(100, 200)}
   return json.dumps(data), 200
+
 
 def main_server(port=5000):
   socketio.run(app, host="0.0.0.0", port=port)
@@ -153,13 +159,12 @@ def iec104_monitor_server(port=8010):
           alert_or_cmnt = is_alert_or_cmnt(ctx)
           if alert_or_cmnt == 'alert':
             new_obj = {'type': 'iec104', 'message': ctx['Message'], 'time': time}
+            socketio.emit("alert", new_obj)
             MongoClient().safe_protocol.alert.insert(new_obj)
-            socketio.emit("alert", {'type': 'iec104', 'message': ctx['Message'], 'time': time})
           else:
-           buffer, ip = ctx['Buffer'], ctx['client Ip']
-           new_obj = {'buffer': buffer, 'ip': ip, 'time': time}
-           MongoClient().safe_protocol.cmnt.insert(new_obj)
-           socketio.emit("ctx", {'buffer': buffer, 'ip': ip, 'time': time})
+            new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'], 'time': time}
+            socketio.emit("ctx", new_obj)
+            MongoClient().safe_protocol.cmnt.insert(new_obj)
 
 
 def modbus_monitor_server(port=8020):
@@ -187,7 +192,7 @@ def modbus_monitor_server(port=8020):
           inputs.remove(r)
         else:
           ctx = util.deal_with_alert_data(data.strip())
-          print('-----'*10, ctx)
+          print('-----' * 10, ctx)
           now = datetime.datetime.now()
           time = now.strftime('%Y-%m-%d %H:%M:%S')
           alert_or_cmnt = is_alert_or_cmnt(ctx)
@@ -196,10 +201,10 @@ def modbus_monitor_server(port=8020):
             socketio.emit("alert", new_obj)
             MongoClient().safe_protocol.alert.insert(new_obj)
           else:
-            buffer, ip = ctx['Buffer'], ctx['client Ip']
-            new_obj = {'buffer': buffer, 'ip': ip, 'time': time}
+            new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'], 'time': time}
             socketio.emit("ctx", new_obj)
             MongoClient().safe_protocol.cmnt.insert(new_obj)
+
 
 @socketio.on('connect')
 def test_connect():
@@ -249,7 +254,6 @@ def receive_json(data):
 
 
 if __name__ == '__main__':
-
   Watcher()
 
   t1 = threading.Thread(target=main_server, name='main_server', args=())
