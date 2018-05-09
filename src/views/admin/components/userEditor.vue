@@ -1,69 +1,132 @@
 <template>
-  <el-dialog title="修改管理员" center>
-    <el-form :model="admin" status-icon :rules="registerRules" ref="admin">
-      <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
-        <el-input v-model="admin.id" auto-complete="off" :disabled="true"></el-input>
+  <el-dialog :title="textMap[dialogStatus]" center :visible.sync="isVisible" @close="hideForm">
+    <el-form :model="dataForm" ref="dataForm" status-icon :rules="formRules" label-position="right" label-width="100px" style="width: 400px; margin-left:50px">
+      <el-form-item label="ID" prop="id">
+        <el-input v-model="dataForm.id" auto-complete="off" :disabled="disabled"></el-input>
       </el-form-item>
-      <el-form-item label="用户名" prop="username" :label-width="formLabelWidth">
-        <el-input v-model="admin.username" auto-complete="off" :disabled="true"></el-input>
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="dataForm.username" auto-complete="off" :disabled="disabled"></el-input>
       </el-form-item>
-      <el-form-item label="新密码" prop="pass" :label-width="formLabelWidth">
-        <el-input type="password" v-model="admin.pass" auto-complete="off"></el-input>
+      <el-form-item label="新密码" prop="password">
+        <el-input type="password" v-model="dataForm.password" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="确认新密码" prop="checkPass" :label-width="formLabelWidth">
-        <el-input type="password" v-model="admin.checkPass" auto-complete="off"></el-input>
+      <el-form-item label="确认新密码" prop="checkPass">
+        <el-input type="password" v-model="dataForm.checkPass" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="权限级别" :label-width="formLabelWidth">
-        <el-select v-model="admin.level" placeholder="请选择管理员权限">
-          <el-option label="超级管理员: A级" value="A" v-if="currentUser.level <= 'A'"></el-option>
-          <el-option label="高级管理员: B级" value="B" v-if="currentUser.level < 'B'"></el-option>
+      <el-form-item label="权限级别">
+        <el-select v-model="dataForm.level" placeholder="请设置管理员权限">
+          <el-option label="超级管理员: A级" value="A"></el-option>
+          <el-option label="高级管理员: B级" value="B"></el-option>
           <el-option label="普通管理员: C级" value="C"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="isVisible = false">取 消</el-button>
-      <el-button type="primary" @click="handleEditUser(admin)">确 定</el-button>
+      <el-button @click="hideForm">取 消</el-button>
+      <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+      <el-button v-else type="primary" @click="updateData">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script type="text/ecmascript-6">
-  import axios from 'axios'
+  import { createUser, updateUser } from '@/api/user'
   export default {
     props: {
-      admin: {
+      dataForm: {
         type: Object
       },
-      currentUser: {
-        type: Object
+      show: {
+        type: Boolean,
+        default: false
+      },
+      dialogStatus: {
+        type: String
       }
     },
     data() {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.dataForm.checkPass !== '') {
+            this.$refs.dataForm.validateField('checkPass')
+          }
+          callback()
+        }
+      }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.dataForm.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
       return {
-        isVisible: false
+        formRules: {
+          password: [
+            {validator: validatePass, trigger: 'blur'}
+          ],
+          checkPass: [
+            {validator: validatePass2, trigger: 'blur'}
+          ]
+        },
+        isVisible: this.show,
+        textMap: {
+          update: '修改管理员',
+          create: '添加管理员'
+        }
+      }
+    },
+    computed: {
+      disabled() {
+        return this.dialogStatus === 'update'
+      }
+    },
+    watch: {
+      show() {
+        this.isVisible = this.show
       }
     },
     methods: {
-      handleVisible() {
-        this.isVisible = !this.isVisible
+      hideForm() {
+        this.$emit('update:show', false)
       },
-      handleEditUser(row) {
-        let params = `password=${row.pass}&level=${row.level}`
-        axios.put(`/api/v1.0/users/${row.id}`, params, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+      sendUpdate() {
+        this.$emit('update')
+        this.hideForm()
+      },
+      createData() {
+        let item = this.dataForm
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            let postData = `id=${item.id}&username=${item.username}&password=${item.password}&level=${item.level}`
+            createUser(postData).then(() => {
+              this.sendUpdate()
+              this.$notify({title: '成功', message: '创建成功', type: 'success', duration: 2000})
+            })
+          } else {
+            this.$notify({title: '警告', message: '提交失败！请重新校验表单数据', type: 'warning', duration: 2000})
           }
-        }).then(res => {
-          // 需要刷新用户列表
-          console.log(res)
-        }).catch(err => {
-            console.error('更新失败:', err)
-          })
-        this.admin.id = ''
-        this.admin.username = ''
-        this.admin.level = ''
-        this.isVisible = false
+        })
+      },
+      updateData() {
+        let item = this.dataForm
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            let postData = `password=${item.password}&level=${item.level}`
+            updateUser(item.id, postData).then(res => {
+              this.sendUpdate()
+              this.$notify({title: '成功', message: '更新成功', type: 'success', duration: 2000})
+            }).catch(err => {
+              console.error('更新失败:', err)
+            })
+          } else {
+            this.$notify({title: '警告', message: '提交失败！请重新校验表单数据', type: 'warning', duration: 2000})
+          }
+        })
       }
     }
   }
