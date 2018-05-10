@@ -22,7 +22,7 @@
       </el-table-column>
     </el-table>
 
-    <user-editor :show.sync="show" @update="getUserData" :dialogStatus="dialogStatus" :dataForm="temp"></user-editor>
+    <user-editor :show.sync="show" @update="getUserData" :dialogStatus="dialogStatus" :dataForm="tempUser" :currentLevel="currentUser.level"></user-editor>
 
   </div>
 </template>
@@ -41,7 +41,7 @@
         dialogStatus: '',
         show: false,
         currentUser: {id: localStorage['id'], level: localStorage['level']},
-        temp: {id: '', username: '', password: '', checkPass: '', level: ''}
+        tempUser: {id: '', username: '', password: '', checkPass: '', level: ''}
       }
     },
     methods: {
@@ -66,7 +66,7 @@
         this.$message({type: type, message: message})
       },
       resetTemp() {
-        this.temp = {id: '', username: '', password: '', checkPass: '', level: ''}
+        this.tempUser = {id: '', username: '', password: '', checkPass: '', level: ''}
       },
       handleCreate() {
         this.resetTemp()
@@ -84,8 +84,8 @@
             return
           }
         }
-        this.temp = Object.assign({}, row)
-        this.temp.password = ''
+        this.tempUser = Object.assign({}, row)
+        this.tempUser.password = ''
         this.dialogStatus = 'update'
         this.show = true
         this.$nextTick(() => {

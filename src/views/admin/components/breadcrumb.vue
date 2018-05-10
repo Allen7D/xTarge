@@ -1,7 +1,6 @@
 <template>
   <el-breadcrumb separator-class="el-icon-arrow-right">
-    <el-breadcrumb-item v-for="item in levelList" :key="item.path"
-                        v-if="item.name">
+    <el-breadcrumb-item v-for="item in levelList" :key="item.path" v-if="item.name">
       <span>{{item.name}}</span>
     </el-breadcrumb-item>
   </el-breadcrumb>

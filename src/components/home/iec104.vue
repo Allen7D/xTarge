@@ -30,7 +30,7 @@
       监控 <span>(监控界面：每当设备收到不符合配置的数据包，信息将显示)</span>
     </nav>
     <div class="iec104-content">
-      <alert-info :alert-data="alertData" :protocol-type="iec104"></alert-info>
+      <alert-info :alertData="alertData" :protocolType="iec104"></alert-info>
       <br>
     </div>
 
@@ -200,7 +200,8 @@
   import functionCodeLimit from 'components/limit/functionCodeLimit'
   import iec104Limit from 'components/home/iLimit'
   import connection from 'components/connection/connection'
-  import alertInfo from './alertInfo'
+  import AlertInfo from './components/alertInfo'
+
   import {sortByLabel, removeByValue} from 'common/js/util'
   import axios from 'axios'
 
@@ -209,7 +210,7 @@
       'fc-limit': functionCodeLimit,
       'i-limit': iec104Limit,
       'v-connection': connection,
-      'alert-info': alertInfo
+      AlertInfo
     },
     data() {
       return {
@@ -342,7 +343,6 @@
         this.fc_options.sort(sortByLabel)
       },
       getAlertData() {
-//        this.alertData = []
         axios.get('/api/v1.0/alerts/iec104')
           .then((res) => {
             res.data.alerts.forEach((item, index) => {

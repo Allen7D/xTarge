@@ -4,12 +4,14 @@ import VueResource from 'vue-resource'
 import VueSocketio from 'vue-socket.io'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'common/stylus/index.styl'
 
 import Login from 'components/login/login'
 import AdminLayout from 'views/admin/layout'
 import User from 'views/admin/user'
 import Operate from 'views/admin/operate'
 import Alert from 'views/admin/alert'
+import Communicate from 'views/admin/communicate'
 import Home from 'components/home/index'
 import Iec104 from 'components/home/iec104'
 import Modbus from 'components/home/modbus'
@@ -30,7 +32,8 @@ const routes = [{
   component: AdminLayout,
   children: [
     { path: '/admin/operate', component: Operate, name: '操作日志' },
-    { path: '/admin/alert', component: Alert, name: '报警日志' }
+    { path: '/admin/alert', component: Alert, name: '报警日志' },
+    { path: '/admin/communicate', component: Communicate, name: '通讯日志' }
   ]
 }, {
   path: '/',

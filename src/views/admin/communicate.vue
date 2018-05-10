@@ -1,13 +1,13 @@
 <template>
-  <el-table :data="alertData" stripe border height="1200">
-    <el-table-column label="报警记录列表">
+  <el-table :data="cnmtData" stripe border height="1200">
+    <el-table-column label="通讯记录列表">
       <el-table-column fixed type="index" label="序号" width="80">
       </el-table-column>
       <el-table-column sortable prop="time" label="时间" width="200">
       </el-table-column>
-      <el-table-column sortable prop="type" label="类型" width="100">
+      <el-table-column sortable prop="ip" label="IP地址" width="200">
       </el-table-column>
-      <el-table-column prop="message" label="Message">
+      <el-table-column prop="buffer" label="Buffer">
       </el-table-column>
     </el-table-column>
   </el-table>
@@ -18,24 +18,24 @@
   export default {
     data() {
       return {
-        alertData: []
+        cmntData: []
       }
     },
     methods: {
       getAlertData() {
         fetchAlert().then((res) => {
-          res.data.alerts.forEach((item, index) => {
-            this.alertData.push({
+          res.data.cmnts.forEach((item, index) => {
+            this.cmntData.push({
               time: item.time,
-              type: item.protocol_type,
-              message: item.message
+              buffer: item.buffer,
+              ip: item.ip
             })
           })
         })
       }
     },
     mounted() {
-      this.getAlertData()
+      this.getCmntData()
     }
   }
 </script>

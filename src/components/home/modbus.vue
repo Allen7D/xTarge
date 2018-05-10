@@ -272,8 +272,9 @@
 
 <script>
   import connection from 'components/connection/connection'
-  import alertInfo from './alertInfo'
+  import alertInfo from './components/alertInfo'
   import mLimit from './mLimit'
+  import UpdateFcn from './components/updateFcn'
   import {sortByLabel, removeByValue} from 'common/js/util'
   import axios from 'axios'
 
@@ -281,7 +282,8 @@
     components: {
       'v-connection': connection,
       'alert-info': alertInfo,
-      'm-limit': mLimit
+      'm-limit': mLimit,
+      UpdateFcn
     },
     data() {
       return {

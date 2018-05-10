@@ -1,20 +1,27 @@
 <template>
-  <div class="bg">
-    <div class="login">
-      <div class="logo"><img src="./logo.png" alt="logo"></div>
-      <div class="title"><span>管理员登录</span></div>
-      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px"
-               class="demo-ruleForm">
-        <el-form-item prop="username">
-          <el-input v-model.number="ruleForm.username" placeholder="用户名"></el-input>
-        </el-form-item>
-        <el-form-item prop="pass">
-          <el-input type="password" v-model="ruleForm.pass" auto-complete="off" placeholder="密码"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-        </el-form-item>
-      </el-form>
+  <div class="login">
+    <div class="main">
+      <div class="logo">
+        <img src="./logo.png" alt="logo">
+      </div>
+      <div class="title">
+        <span>管理员登录</span>
+      </div>
+      <div class="content">
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item prop="username">
+            <el-input v-model.number="ruleForm.username" placeholder="用户名"></el-input>
+          </el-form-item>
+          <el-form-item prop="pass">
+            <el-input type="password" v-model="ruleForm.pass" auto-complete="off" placeholder="密码"></el-input>
+          </el-form-item>
+          <el-form-item class="button">
+            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <div class="bg">
     </div>
   </div>
 </template>
@@ -92,41 +99,48 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  .bg
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    padding-top: 10%
-    background-size: cover
-    background-repeat: no-repeat
-    background-image: url(./background.jpg)
-
   .login
-    width: 400px
-    padding: 20px 90px 100px 0
-    margin: 0 auto
-    border-radius: 10px
-    text-align: center //内部居中
-    background-color: white
-    .logo
-      img
+    .main
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      margin: auto
+      position: absolute
+      height 400px
+      width: 500px
+      border-radius: 10px
+      text-align: center
+      padding-top: 30px
+      background: rgb(255,255,255)
+      z-index: 1
+      .logo img
         width: 70px
         border-radius: 50%
         border: 1px solid rgba(14, 32, 108, 0.4)
-        padding: 5px
-        margin-left: 100px
-    .title
-      font-size: 16px
-      letter-spacing: 1px
-      text-indent: 1px
-      margin-bottom: 22px
-      margin-left: 100px
-    .el-button
-      width: 300px
-      background-color: rgba(14, 32, 108, 1.0)
-      font-size: 20px
-      letter-spacing: 20px
-      text-indent: 20px
-
+        margin: 5px auto
+      .title
+        font-size: 20px
+        letter-spacing: 2px
+        margin: 5px auto 30px
+      .content
+        margin: 0 80px 0 -20px
+        .button
+          margin-top: 50px
+          .el-button
+            width: 250px
+            background-color: rgba(14, 32, 108, 1.0)
+            font-size: 20px
+            letter-spacing: 20px
+            text-indent: 20px
+    .bg
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      margin: auto
+      position: absolute
+      background-size: cover
+      background-repeat: no-repeat
+      background-image: url(./background.jpg)
 </style>

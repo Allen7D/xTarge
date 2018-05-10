@@ -15,15 +15,14 @@
       </el-form-item>
       <el-form-item label="权限级别">
         <el-select v-model="dataForm.level" placeholder="请设置管理员权限">
-          <el-option label="超级管理员: A级" value="A"></el-option>
-          <el-option label="高级管理员: B级" value="B"></el-option>
-          <el-option label="普通管理员: C级" value="C"></el-option>
+          <el-option v-for="(item, index) in adminLevel" v-if="currentLevel <= item.level"
+                     :label="item.name" :value="item.level" :key="index"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="hideForm">取 消</el-button>
-      <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确 定</el-button>
+      <el-button v-if="dialogStatus==='create'" type="primary" @click="createData">确 定</el-button>
       <el-button v-else type="primary" @click="updateData">确 定</el-button>
     </div>
   </el-dialog>
@@ -41,6 +40,9 @@
         default: false
       },
       dialogStatus: {
+        type: String
+      },
+      currentLevel: {
         type: String
       }
     },
@@ -77,7 +79,12 @@
         textMap: {
           update: '修改管理员',
           create: '添加管理员'
-        }
+        },
+        adminLevel: [
+          {name: '超级管理员: A级', level: 'A'},
+          {name: '高级管理员: B级', level: 'B'},
+          {name: '普通管理员: C级', level: 'C'}
+        ]
       }
     },
     computed: {

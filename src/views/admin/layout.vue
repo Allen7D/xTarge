@@ -21,6 +21,7 @@
               <el-menu-item-group>
                 <el-menu-item index="2-1" @click="handleRouter('/admin/operate')">操作日志</el-menu-item>
                 <el-menu-item index="2-2" @click="handleRouter('/admin/alert')">报警日志</el-menu-item>
+                <el-menu-item index="2-3" @click="handleRouter('/admin/communicate')">通讯日志</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -43,9 +44,6 @@
 
 <script type="text/ecmascript-6">
   import XHeader from 'components/header/header.vue'
-  import User from './user'
-  import Alert from './alert'
-  import Operate from './operate'
   import Breadcrumb from './components/breadcrumb'
 
   import {mapState} from 'vuex'
@@ -53,9 +51,6 @@
   export default {
     components: {
       XHeader,
-      User,
-      Alert,
-      Operate,
       Breadcrumb
     },
     data() {
