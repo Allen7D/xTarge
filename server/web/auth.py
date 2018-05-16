@@ -2,7 +2,7 @@
 """
   Created by Alimazing on 2018/4/19.
 """
-from flask import json, request, render_template
+from flask import json, jsonify, request, render_template
 from server.model.user import User
 from . import web
 
@@ -19,7 +19,7 @@ def login():
   is_user = User.verify_user(username, password)
   if is_user:
     user = User.get_user_by_name(username)
-    return json.dumps({
+    return jsonify({
       '_id': user['_id'],
       'name': user['name'],
       'level': user['level']

@@ -28,8 +28,7 @@
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
-
-  import axios from 'axios'
+  import { authLogin } from '@/api/auth'
   export default {
     data() {
       var checkUsername = (rule, value, callback) => {
@@ -58,7 +57,6 @@
           pass: [
             {validator: validatePass, trigger: 'blur'}
           ]
-
         }
       }
     },
@@ -67,30 +65,25 @@
     },
     methods: {
       handleLoginError() {
-        this.$notify.error({
-          title: '错误',
-          message: '账号密码错误'
-        })
+        this.$notify.error({title: '错误', message: '账号密码错误'})
         this.$router.push('/login')
       },
       submitForm(formName) {
-        let postData = 'username=' + this.ruleForm.username + '&password=' + this.ruleForm.pass
-        axios.post('http://127.0.0.1:5000/login', postData, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then((res) => {
-          console.log('登录', res)
-          this.$store.commit('updateUserInfo', res.data)
+        const formData = 'username=' + this.ruleForm.username + '&password=' + this.ruleForm.pass
+        authLogin(formData).then((res) => {
+          const data = res.data
+          this.$store.commit('updateUserInfo', data)
           this.$store.commit('switchLogin', true)
 
-          localStorage['username'] = res.data.name
-          localStorage['level'] = res.data.level
-          localStorage['id'] = res.data._id
+          localStorage['username'] = data.name
+          localStorage['level'] = data.level
+          localStorage['id'] = data._id
           localStorage['isLogin'] = true
 
           this.$router.push('/modbus')
-        }).catch(() => {
+        }).catch((err) => {
+          this.loginStatus = err
+          console.log('err', err)
           this.handleLoginError()
         })
       }

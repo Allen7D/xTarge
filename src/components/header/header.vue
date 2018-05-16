@@ -27,12 +27,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Screenfull from 'components/screenfull/screenfull'
   import logo from './logo.png'
   export default {
-    components: {
-      Screenfull
-    },
     data() {
       return {
         name: '',
