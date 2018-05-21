@@ -2,10 +2,10 @@
 """
   Created by Alimazing on 2018/4/19.
 """
-from flask import request, json, jsonify
+from flask import request, jsonify
 from server.model.user import User
-from . import api
 from server.model.util import Utility
+from . import api
 
 __author__ = 'Alimazing'
 
@@ -14,17 +14,17 @@ __author__ = 'Alimazing'
 def get_user():
     # data = User.get_user()
     data = Utility.get_data(table="user")
-    return json.dumps(data), 200
+    return jsonify(data), 200
 
 
 @api.route('/api/v1.0/users', methods=['POST'])
-def post_user():
+def create_user():
     user = {'id': request.form['id'],
             'username': request.form['username'],
             'password': request.form['password'],
             'level': request.form['level'],
             }
-    User.add_user(user)
+    User.create_user(user)
     return jsonify({}), 200
 
 

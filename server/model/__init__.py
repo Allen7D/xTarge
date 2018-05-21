@@ -6,5 +6,5 @@ __author__ = 'Alimazing'
 
 from .user import db_user
 from .alert import db_alert
-from .oper import db_op
+from .oper import db_oper
 from .cmnt import db_cmnt

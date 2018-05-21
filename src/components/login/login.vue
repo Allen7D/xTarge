@@ -69,7 +69,8 @@
         this.$router.push('/login')
       },
       submitForm(formName) {
-        const formData = 'username=' + this.ruleForm.username + '&password=' + this.ruleForm.pass
+        const formData = `username=${this.ruleForm.username}&password=${this.ruleForm.pass}`
+
         authLogin(formData).then((res) => {
           const data = res.data
           this.$store.commit('updateUserInfo', data)

@@ -1,348 +1,111 @@
 <template>
-  <div class="protocol modbus">
+  <div class="protocol">
     <nav class="title">
       <i class="el-icon-setting"></i>
       配置 <span>(配置方式：选择限制的功能，完成后选择发送)</span>
     </nav>
     <div class="protocol-content">
       <el-form :model="configForm" ref="configForm" label-width="10px" class="demo-dynamic">
-        <!--报警连接 开始-->
+        <!--报警连接-->
         <v-connection :connection="configForm.connection"></v-connection>
-        <!--报警连接 结束-->
-
+        <!--功能码限制-->
         <m-limit :fc_options="fc_options" :m_options="m_options" :restrictions="configForm.restrictions"
                  :connection="configForm.connection"></m-limit>
-
-        <div class="config">
-          <el-collapse accordion>
-            <el-collapse-item>
-              <template slot="title">
-                <nav class="config-titile">
-                  添加/移除 功能码
-                </nav>
-              </template>
-              <el-container>
-                <el-main>
-                  <el-transfer
-                    :titles="['功能码(可添加)', '功能码(可移除)']"
-                    filterable
-                    :filter-method="filterMethod"
-                    filter-placeholder="请输入功能码"
-                    :button-texts="['功能码栏 添加', '功能码栏 移除']"
-                    @change="handleChange"
-                    v-model="transfer_value"
-                    :data="fc_ad_data">
-                  </el-transfer>
-                </el-main>
-              </el-container>
-            </el-collapse-item>
-          </el-collapse>
-        </div>
-        <!-- 总提交按钮 -->
       </el-form>
       <div class="command">
-        <el-button type="text" @click="showForm = true">显示</el-button>
+        <el-button type="text" @click="showConfig">功能码添加</el-button>
+        <el-button type="text" @click="isShowDetail = true">显示</el-button>
         <el-button type="text" @click="verifyForm">验证</el-button>
         <el-button type="text" @click="submitForm">发送</el-button>
       </div>
     </div>
 
     <nav class="title">
-      <i class="el-icon-setting"></i>
-      监控 <span>(监控界面：每当设备收到不符合配置的数据包，信息将显示)</span>
+      <i class="el-icon-setting"></i>监控 <span>(监控界面：每当设备收到不符合配置的数据包，信息将显示)</span>
     </nav>
     <div class="modbus-content">
-      <alert-info :alert-data="alertData" :protocol-type="modbus"></alert-info>
-      <br>
+      <alert-info :alertData="list" protocolType="modbus"></alert-info>
+      <div class="pagination-container">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
+                       :page-sizes="[10, 20, 30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
+      </div>
     </div>
 
-    <!--验证配置信息，开始-->
-    <el-dialog
-      title="配置显示"
-      :visible.sync="showForm"
-      width="60%"
-      :before-close="handleClose">
-
-      <div class="check-table">
-        <div class="connection border-2px">
-          <h2>报警连接</h2>
-          <div style="margin-left: 30px; margin-top: 15px;">
-            <el-input placeholder="请输入内容" v-model="this.configForm.connection.ip" disabled>
-              <template slot="prepend">IP地址</template>
-            </el-input>
-            <el-input placeholder="请输入内容" v-model="this.configForm.connection.port" disabled>
-              <template slot="prepend">端口号</template>
-            </el-input>
-          </div>
-        </div>
-
-        <div class="restrictions border-2px" v-if="this.configForm.restrictions">
-          <h2>限制项</h2>
-          <div class="restriction border-2px" v-for="(restriction, rIndex) in this.configForm.restrictions" :key="rIndex">
-            <h3>限制项 {{rIndex + 1}}</h3>
-            <div style="margin-left: 30px; margin-top: 15px;">
-              <el-input placeholder="请输入内容" v-model="restriction.address.ip" disabled>
-                <template slot="prepend">IP地址</template>
-              </el-input>
-              <el-input placeholder="请输入内容" v-model="restriction.address.mac" disabled>
-                <template slot="prepend">MAC地址</template>
-              </el-input>
-              <el-switch
-                v-model="restriction.address.default"
-                active-text="开启"
-                inactive-text="关闭"
-                disabled>
-              </el-switch>
-
-              <div v-if="restriction.function_codes" class="border-2px" style="margin-top: 10px; padding-left: 30px">
-                <el-collapse v-model="activeName" accordion>
-                  <el-collapse-item name="1">
-                    <template slot="title">
-                      <nav class="config-titile">
-                        功能码限制
-                      </nav>
-                    </template>
-                    <el-form
-                      v-for="(function_code, fcIndex) in restriction.function_codes"
-                      :key="function_code.key"
-                    >
-                      <el-container class="function-code border-2px">
-                        <el-main class="clearfix">
-                          <el-form-item :inline="true">
-                            功能码{{fcIndex}}：
-
-                            <el-input placeholder="请输入内容" v-model="fc_options[function_code.id - 1].label" disabled>
-                              <template slot="prepend">功能码</template>
-                            </el-input>
-                            <el-switch
-                              v-model="function_code.default"
-                              active-text="开启"
-                              inactive-text="关闭"
-                              disabled>
-                            </el-switch>
-
-                          </el-form-item>
-
-                          <el-form-item v-if="function_code.excepts.length !== 0">
-                            <el-form class="in-line"
-                                     :inline="true"
-                                     v-for="(except, exceptIndex) in function_code.excepts"
-                                     :label="'例外 ' + exceptIndex + ' :'"
-                                     :key="except.key">
-                              <div class="fc-except">
-                                <el-form-item>
-                                  例外{{exceptIndex + 1}}:
-                                  <el-input placeholder="" v-if="except.start.year !== -1" v-model="except.start.year"
-                                            style="width: 100px;" disabled>
-                                    <template slot="append">年</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.start.mon !== -1" v-model="except.start.mon"
-                                            disabled>
-                                    <template slot="append">月</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.start.day !== -1" v-model="except.start.day"
-                                            disabled>
-                                    <template slot="append">日</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.start.hour !== -1" v-model="except.start.hour"
-                                            disabled>
-                                    <template slot="append">时</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.start.min !== -1" v-model="except.start.min"
-                                            disabled>
-                                    <template slot="append">分</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.start.sec !== -1" v-model="except.start.sec"
-                                            disabled>
-                                    <template slot="append">秒</template>
-                                  </el-input>
-                                </el-form-item>
-                                <span style="margin-right: 5px;">~</span>
-                                <el-form-item>
-                                  <el-input placeholder="" v-if="except.end.year !== -1" v-model="except.end.year"
-                                            style="width: 100px;" disabled>
-                                    <template slot="append">年</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.end.mon !== -1" v-model="except.end.mon"
-                                            disabled>
-                                    <template slot="append">月</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.end.day !== -1" v-model="except.end.day"
-                                            disabled>
-                                    <template slot="append">日</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.end.hour !== -1" v-model="except.end.hour"
-                                            disabled>
-                                    <template slot="append">时</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.end.min !== -1" v-model="except.end.min"
-                                            disabled>
-                                    <template slot="append">分</template>
-                                  </el-input>
-
-                                  <el-input placeholder="" v-if="except.end.sec !== -1" v-model="except.end.sec"
-                                            disabled>
-                                    <template slot="append">秒</template>
-                                  </el-input>
-                                </el-form-item>
-                              </div>
-                            </el-form>
-                          </el-form-item>
-                        </el-main>
-                      </el-container>
-                    </el-form>
-                  </el-collapse-item>
-                </el-collapse>
-              </div>
-
-              <div v-if="restriction.memories" class="memory border-2px" style="margin-top: 10px;">
-                <el-collapse v-model="activeName" accordion>
-                  <el-collapse-item name="1">
-                    <template slot="title">
-                      <nav class="config-titile">
-                        内存限制
-                      </nav>
-                    </template>
-
-                    <el-form
-                      v-for="memory in restriction.memories"
-                      :key="memory.key"
-                    >
-                      <el-container class="border-2px">
-                        <el-main>
-                          <el-form-item :inline="true">
-                            <el-input v-model="m_options[memory.id].label" disabled>
-                              <template slot="prepend">内存类型</template>
-                            </el-input>
-                            <el-input v-model="m_options[memory.id2].label" disabled>
-                              <template slot="prepend">功能码类型</template>
-                            </el-input>
-                            <el-switch
-                              v-model="memory.default"
-                              active-text="开启"
-                              inactive-text="关闭"
-                              disabled>
-                            </el-switch>
-                          </el-form-item>
-                          <el-form-item v-if="memory.excepts.length !== 0">
-                            <el-form class="in-line" :inline="true"
-                                     style="margin: 5px"
-                                     v-for="(except, index) in memory.excepts"
-                                     :label="'例外 ' + index + ' :'"
-                                     :key="except.key">
-                              例外{{index + 1}} :
-                              <el-input v-model="except.start" disabled>
-                                <template slot="prepend">开始地址</template>
-                              </el-input>
-
-                              <el-input v-model="except.end" disabled>
-                                <template slot="prepend">结束地址</template>
-                              </el-input>
-                            </el-form>
-
-                          </el-form-item>
-                        </el-main>
-                      </el-container>
-                    </el-form>
-                  </el-collapse-item>
-                </el-collapse>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="showForm = false">隐藏</el-button>
-      </span>
-    </el-dialog>
-    <!--验证配置信息，结束-->
-
+    <config-detail :isShow.sync="isShowDetail" :configForm="configForm"
+                :currentCode="currentCode" :modbusMemory="memory"></config-detail>
+    <code-transfer :isShow.sync="isShowConfig" :updateCode="updateCode"
+                 :currentCode="currentCode" :reserveCode="reserveCode"
+    >
+    </code-transfer>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
   import connection from 'components/connection/connection'
   import alertInfo from './components/alertInfo'
   import mLimit from './mLimit'
   import UpdateFcn from './components/updateFcn'
-  import {sortByLabel, removeByValue} from 'common/js/util'
-  import axios from 'axios'
+  import FormatDate from 'components/time/formatDate'
+  import ConfigDetail from './components/configDetail'
+  import CodeTransfer from './components/codeTransfer'
+  import { fetchAlert } from '@/api/alert'
+  import { createOperate } from '@/api/operate'
 
   export default {
     components: {
       'v-connection': connection,
       'alert-info': alertInfo,
       'm-limit': mLimit,
-      UpdateFcn
+      UpdateFcn,
+      FormatDate,
+      ConfigDetail,
+      CodeTransfer
     },
     data() {
       return {
-        alertData: [],
-        showForm: false,
+        total: null,
+        listQuery: {
+          limit: 10,
+          page: 1,
+          type: 'modbus'
+        },
+        list: [],
+        isShowConfig: false,
+        currentCode: this.$store.state.modbus.currentCode,
+        reserveCode: this.$store.state.modbus.reserveCode,
+        memory: this.$store.state.modbus.memory,
+        isShowDetail: false,
         activeName: '1',
-        fcodes: [],
-        fc_options: [],
-        m_options: [],
-        memory_default_value: '',
-        fc_ad_data: [],
-        transfer_value: [],
         configForm: {
           connection: {
             ip: '127.0.0.1',
             port: 8020
           },
           restrictions: []
-        },
-        filterMethod(query, item) {
-          return item.seq.indexOf(query) > -1
         }
       }
     },
-    created() {
-      this.$http.get('/api/modbus').then((response) => {
-        this.modbus_data = response.body.data
-        this.modbus_0 = this.modbus_data['function_code']['appendable']
-        this.modbus_1 = this.modbus_data['function_code']['appended']
-        this.modbus_m = this.modbus_data['memory']
-
-        for (let i in this.modbus_1) {
-          this.fc_options.push({'value': parseInt(i.split(' ')[0]), 'label': i})
-        }
-
-        for (let j in this.modbus_0) {
-          this.fcodes.push(j)
-        }
-
-        this.fcodes.forEach((fcode, index) => {
-          this.fc_ad_data.push({
-            label: fcode,
-            key: index,
-            seq: this.fcodes[index].split(' ')[0]
-          })
-        })
-        for (let k in this.modbus_m) {
-          this.m_options.push({'value': this.modbus_m[k], 'label': k})
-        }
-      })
+    computed: {
+      totalCode() {
+        return this.currentCode.concat(this.reserveCode)
+      },
+      fc_options() {
+        return this.$store.state.modbus.currentCode
+      },
+      m_options() {
+        return this.$store.state.modbus.memory
+      }
+    },
+    mounted() {
       this.getAlertData()
     },
     methods: {
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done()
-          }).catch(
-            _ => {})
+      showConfig() {
+        this.isShowConfig = true
+      },
+      updateCode(data) {
+        this.$store.commit('updateModbus', data)
       },
       verifyForm() {
         this.$alert('<strong>是否 <i>确定</i> 验证</strong>', 'Modbus 配置验证', {
@@ -374,66 +137,37 @@
             'user_name': localStorage['username'],
             'user_id': localStorage['id']
           })
-        let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&op=${JSON.stringify(this.configForm, null)}`
-
-        axios.post('/api/v1.0/ops', postData, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '发送成功!'
-          })
+          let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&oper=${JSON.stringify(this.configForm, null)}`
+          createOperate(postData).then(res => {
+          this.$message({type: 'success', message: '发送成功!'})
         }).catch(err => {
-          console.log(err)
+          console.log('err', err)
         })
       })
       .catch(() => {
-          this.$message({
-          type: 'info',
-          message: '已取消发送!'
-        })
+          this.$message({type: 'info', message: '已取消发送!'})
       })
       },
-      handleChange(value, direction, movedKeys) {
-        if (direction === 'right') {
-          for (let i in movedKeys) {
-            this.fc_options.push(
-              {
-                'value': parseInt(this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0]),
-                'label': this.fc_ad_data[movedKeys[i]]['label']
-              }
-            )
-          }
-          this.$notify({
-            title: '添加',
-            message: '提示消息：添加成功',
-            type: 'success'
-          })
-        } else {
-          for (let i in movedKeys) {
-            removeByValue(this.fc_options, this.fc_ad_data[movedKeys[i]]['label'].split(' ')[0])
-          }
-          this.$notify({
-            title: '删除',
-            message: '提示消息：删除成功',
-            type: 'success'
-          })
-        }
-        this.fc_options.sort(sortByLabel)
-      },
       getAlertData() {
-        axios.get('/api/v1.0/alerts/modbus')
-          .then((res) => {
-            res.data.alerts.forEach((item, index) => {
-              this.alertData.push({
-                protocol_type: item.protocol_type,
-                time: item.time,
-                message: item.message
-              })
+        this.list = []
+        fetchAlert(this.listQuery).then((res) => {
+          this.total = res.data.total
+          res.data.data.forEach((item, index) => {
+            this.list.push({
+              protocol_type: item.protocol_type,
+              time: item.time,
+              message: item.message
             })
           })
+        })
+      },
+      handleSizeChange(val) {
+        this.listQuery.limit = val
+        this.getAlertData()
+      },
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        this.getAlertData()
       }
     },
     sockets: {
@@ -442,11 +176,7 @@
       },
       alert(message) {
         if (message['type'] === 'modbus') {
-          this.alertData.push({
-            protocol_type: message['type'],
-            time: message['time'],
-            message: message['message']
-          })
+          this.getAlertData()
         }
       },
       setting(message) {
@@ -542,30 +272,4 @@
 
   .el-range-input
     width: 43% !important
-
-  /*表单检查*/
-  .check-table
-    .border-2px
-      border: solid 2px #409dff
-      border-radius: 5px
-    .connection
-      padding: 10px
-    .restrictions
-      margin-top: 10px
-      padding: 10px
-      .restriction
-        margin: 10px
-        padding: 10px
-        .function-code
-          .fc-except
-            margin: 5px
-            .el-input
-              width: 75px
-              .el-input-group__append
-                padding: 0 5px
-        .memory
-          margin: 10px 0
-          padding-left: 30px
-    .el-input
-      width: 300px
 </style>

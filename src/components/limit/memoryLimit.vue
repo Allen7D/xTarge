@@ -17,9 +17,9 @@
                                 <el-select v-model="memory.id" placeholder="请选择">
                                     <el-option
                                             v-for="item in m_options"
-                                            :key="item.value"
-                                            :value="item.value"
-                                            :label="item.label"
+                                            :key="item.id"
+                                            :value="item.id"
+                                            :label="item.value"
                                     >
                                     </el-option>
                                 </el-select>
@@ -27,9 +27,9 @@
                                 <el-select v-model="memory.id2" placeholder="请选择">
                                     <el-option
                                             v-for="item in fc_options"
-                                            :key="item.value"
-                                            :value="item.value"
-                                            :label="item.label"
+                                            :key="item.id"
+                                            :value="item.id"
+                                            :label="item.value"
                                     >
                                     </el-option>
                                 </el-select>

@@ -12,6 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/*': {
+        // target: `http://${process.env.HOST}:5000`
         target: 'http://0.0.0.0:5000'
       }
     },

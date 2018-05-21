@@ -16,22 +16,14 @@
                             <el-form-item :inline="true">
                                 功能码{{fcIndex}}：
 
-                                <!--<v-selection :remote_value.sync="function_code"-->
-                                <!--:options="fc_options"></v-selection>-->
-
                                 <el-select v-model="function_code.id" placeholder="请选择">
-                                    <el-option
-                                            v-for="item in fc_options"
-                                            :key="item.value"
-                                            :value="item.value"
-                                            :label="item.label"
+                                    <el-option v-for="item in fc_options"
+                                            :key="item.id" :value="item.id" :label="item.value"
                                     >
                                     </el-option>
                                 </el-select>
 
                                 默认打开：
-
-                                <!--<v-uni-switch :remote_value.sync="function_code.default"></v-uni-switch>-->
                                 <el-switch
                                         v-model="function_code.default"
                                         active-text="开启"

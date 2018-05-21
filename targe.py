@@ -5,8 +5,7 @@
 import signal, sys
 from threading import Thread
 from server.utils.watcher import Watcher
-from server import create_app, monitor_server, Monitor
-# , iec104_monitor_server, modbus_monitor_server
+from server import create_app, Monitor
 
 __author__ = 'Alimazing'
 

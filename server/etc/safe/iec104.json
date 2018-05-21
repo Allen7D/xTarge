@@ -1,7 +1,89 @@
 {
     "connection": {
-        "ip": "12312312312",
-        "port": "801012312"
+        "ip": "127.0.0.1",
+        "port": 8010
     },
-    "restrictions": []
+    "restrictions": [
+        {
+            "address": {
+                "ip": "192.168.0.1",
+                "mac": "hehe",
+                "default": true
+            },
+            "function_codes": [
+                {
+                    "id": 1,
+                    "default": true,
+                    "excepts": [
+                        {
+                            "start": {
+                                "year": 2018,
+                                "mon": 5,
+                                "day": 24,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            },
+                            "end": {
+                                "year": 2018,
+                                "mon": 6,
+                                "day": 15,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": 127,
+                    "default": true,
+                    "excepts": [
+                        {
+                            "start": {
+                                "year": 2018,
+                                "mon": 5,
+                                "day": 3,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            },
+                            "end": {
+                                "year": 2018,
+                                "mon": 6,
+                                "day": 22,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            }
+                        },
+                        {
+                            "start": {
+                                "year": 2018,
+                                "mon": 5,
+                                "day": 2,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            },
+                            "end": {
+                                "year": 2018,
+                                "mon": 6,
+                                "day": 5,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

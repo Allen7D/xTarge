@@ -9,5 +9,14 @@ export default {
   isLogin: localStorage['isLogin'] === 'true',
   iFuncCodes: {},
   mFuncCodes: {},
-  mMemories: {}
+  mMemories: {},
+  iec104: {
+    currentCode: [],
+    reserveCode: []
+  },
+  modbus: {
+    currentCode: [],
+    reserveCode: [],
+    memory: []
+  }
 }

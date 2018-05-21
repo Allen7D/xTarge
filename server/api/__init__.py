@@ -11,3 +11,4 @@ api = Blueprint('api', __name__)
 from server.api import user
 from server.api import alert
 from server.api import oper
+from server.api import cmnt

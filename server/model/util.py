@@ -1,17 +1,12 @@
 # !/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
-# !/usr/bin/env python
-# _*_ coding: utf-8 _*_
-
 from pymongo import MongoClient
 from flask import request
 
-
 class Utility(object):
-
     @staticmethod
-    def get_data(table="cmnt", protocol_type=None):
+    def get_data(table="cmnt"):
         '''
             table: table (collection)
         '''
@@ -20,57 +15,61 @@ class Utility(object):
         _db = MongoClient().safe_protocol[table]
         # data = _db.find().sort("time", -1).skip(limit * (page - 1)).limit(limit)
         if table == "alert":
-            alert_list = []
+            data_list = []
             alerts = _db.find().sort("time", -1).skip(limit * (page - 1)).limit(limit)
+            total = _db.count()
             for alert in alerts:
                 alert = {
                     'time': alert.get('time'),
                     'protocol_type': alert.get('type'),
                     'message': alert.get('message')
                 }
-                alert_list.append(alert)
+                data_list.append(alert)
 
+            protocol_type = request.args.get("type")
             if protocol_type:
-                alert_list = list(
-                    filter(lambda x: x['protocol_type'] == protocol_type, alert_list))
-            return {'alerts': alert_list}
+                data_list = list(filter(lambda x: x['protocol_type'] == protocol_type, data_list))
+                total = len(data_list)
+            return {'data': data_list, 'total': total}
 
         elif table == "user":
-            user_list = []
-            users = _db.find().sort("register_time", -1).skip(limit * (page - 1)).limit(limit)
+            data_list = []
+            users = _db.find().sort("create_time", -1).skip(limit * (page - 1)).limit(limit)
+            total = _db.count()
             for user in users:
-                user_list.append({
+                data_list.append({
                     'user_id': user.get('_id'),
                     'username': user.get('name'),
                     'level': user.get('level'),
-                    'register_time': user.get('register_time')
+                    'create_time': user.get('create_time')
                 })
 
-            return {'users': user_list}
+            return {'data': data_list, 'total': total}
 
-        elif table == "os":
-            op_list = []
-            ops = _db.find().sort("time", -1).skip(limit * (page - 1)).limit(limit)
-            for op in ops:
-                op = {
-                    'user_id': op.get('user_id'),
-                    'username': op.get('user_name'),
-                    'time': op.get('time'),
-                    'protocol_type': op.get('protocol_type'),
-                    'op': op.get('os')
+        elif table == "oper":
+            data_list = []
+            opers = _db.find().sort("time", -1).skip(limit * (page - 1)).limit(limit)
+            total = _db.count()
+            for oper in opers:
+                oper = {
+                    'user_id': oper.get('user_id'),
+                    'username': oper.get('user_name'),
+                    'time': oper.get('time'),
+                    'protocol_type': oper.get('protocol_type'),
+                    'oper': oper.get('oper')
                 }
-                op_list.append(op)
-            return {'ops': op_list}
+                data_list.append(oper)
+            return {'data': data_list, 'total': total}
 
         elif table == "cmnt":
-            cmnt_list = []
+            data_list = []
             cmnts = _db.find().sort("time", -1).skip(limit * (page - 1)).limit(limit)
+            total = _db.count()
             for cmnt in cmnts:
                 cmnt = {
                     'time': cmnt.get('time'),
                     'buffer': cmnt.get('buffer'),
                     'ip': cmnt.get('ip')
                 }
-                cmnt_list.append(cmnt)
-
-            return {'cmnts': cmnt_list}
+                data_list.append(cmnt)
+            return {'data': data_list, 'total': total}

@@ -1,6 +1,6 @@
 <template>
-    <div class="oplog">
-      <el-table :data="operateData" stripe border height="1200">
+    <div class="operate">
+      <el-table :data="list" stripe border height="700">
         <el-table-column label="操作记录列表">
           <el-table-column fixed type="index" label="序号" width="80"></el-table-column>
           <el-table-column sortable prop="time" label="时间" width="200"></el-table-column>
@@ -13,52 +13,80 @@
           </el-table-column>
         </el-table-column>
       </el-table>
-      <operate-detail :show.sync="show" :dataForm="tempDetail"></operate-detail>
+      <div class="pagination-container">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
+                       :page-sizes="[10, 20, 30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
+      </div>
+
+      <config-detail :isShow.sync="show" :configForm="tempDetail"
+                     :currentCode="totalCode" :modbusMemory="memory"></config-detail>
+
     </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
   import { fetchOperate } from '@/api/operate'
-  import OperateDetail from './components/operateDetail.vue'
-
+  import ConfigDetail from 'components/home/components/configDetail'
   export default {
     components: {
-      OperateDetail
+      ConfigDetail
     },
     data() {
       return {
         show: false,
-        operateData: [],
+        total: null,
+        listQuery: {
+          limit: 10,
+          page: 1
+        },
+        list: [],
         tempDetail: {},
-        fc_options: [],
-        m_options: []
+        totalCode: [],
+        memory: this.$store.state.modbus.memory
       }
     },
     methods: {
-      getOperateData() {
-        fetchOperate().then(res => {
-          res.data.ops.forEach((item, index) => {
-            this.operateData.push({
+      getData() {
+        this.list = []
+        fetchOperate(this.listQuery).then(res => {
+          res.data.data.forEach((item, index) => {
+            this.total = res.data.total
+            this.list.push({
               user_id: item.user_id,
               username: item.username,
               time: item.time,
               type: item.protocol_type || '未知',
-              detail: item.op
+              detail: item.oper
             })
           })
         })
       },
+      handleSizeChange(val) {
+        this.listQuery.limit = val
+        this.getData()
+      },
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        this.getData()
+      },
       showDetail(row) {
-        let data = JSON.parse(row.detail)
-        if (typeof data === 'string') {
-          data = JSON.parse(data)
+        this.tempDetail = Object.assign({}, row.detail)
+        if (row.type === 'iec104') {
+          this.totalCode = this.$store.getters.totalIec104Code
+        } else {
+          this.totalCode = this.$store.getters.totalModbusCode
         }
-        this.tempDetail = Object.assign({}, row)
         this.show = true
       }
     },
     mounted() {
-      this.getOperateData()
+      this.getData()
+    },
+    sockets: {
+      alert(message) {
+        this.getAlertData()
+      }
     }
   }
 </script>
@@ -86,4 +114,6 @@
                 padding: 0 5px
     .el-input
       width: 300px
+    .pagination-container
+      margin-top: 30px
 </style>

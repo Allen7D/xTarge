@@ -11,20 +11,21 @@ from . import api
 __author__ = 'Alimazing'
 
 
-@api.route('/api/v1.0/ops', methods=['GET'])
+@api.route('/api/v1.0/opers', methods=['GET'])
 def get_oper():
     # data = Oper.get_oper()
-    data = Utility.get_data(table="os")
+    data = Utility.get_data(table="oper")
     return json.dumps(data), 200
 
 
-@api.route('/api/v1.0/ops', methods=['POST'])
-def post_oper():
-    op = {
+@api.route('/api/v1.0/opers', methods=['POST'])
+def create_oper():
+    print(request.form)
+    oper = {
         'user_id': request.form['user_id'],
         'username': request.form['username'],
         'protocol_type': request.form['protocol_type'],
-        'op': request.form['op']
+        'oper': json.loads(request.form['oper'])
     }
-    Oper.add_oper(op)
+    Oper.create_oper(oper)
     return json.dumps({}), 200

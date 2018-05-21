@@ -4,34 +4,35 @@
 from pymongo import MongoClient
 import time
 
-db_op = MongoClient().safe_protocol.os
+db_oper = MongoClient().safe_protocol.oper
 
 class Oper:
   @staticmethod
   def get_oper():
-    op_list = []
-    ops = db_op.find()
-    for op in ops:
-      op = {
-        'user_id': op.get('user_id'),
-        'username': op.get('user_name'),
-        'time': op.get('time'),
-        'protocol_type': op.get('protocol_type'),
-        'op': op.get('os')
+    oper_list = []
+    opers = db_oper.find()
+    for oper in opers:
+      oper = {
+        'user_id': oper.get('user_id'),
+        'username': oper.get('user_name'),
+        'time': oper.get('time'),
+        'protocol_type': oper.get('protocol_type'),
+        'op': oper.get('oper')
       }
-      op_list.append(op)
-    return {'ops': op_list}
+      oper_list.append(oper)
+    return {'opers': oper_list}
 
   @staticmethod
-  def add_oper(op):
-    op = {
-      'user_id': op['user_id'],
-      'user_name': op['username'],
+  def create_oper(oper):
+    oper = {
+      'user_id': oper['user_id'],
+      'user_name': oper['username'],
       'time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-      'protocol_type': op['protocol_type'],
-      'os': op['op']
+      'protocol_type': oper['protocol_type'],
+      'oper': oper['oper']
     }
-    db_op.insert(op)
+    print('hehe'*10, oper)
+    db_oper.insert(oper)
 
 
 

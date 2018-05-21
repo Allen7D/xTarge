@@ -123,7 +123,7 @@
         let item = this.dataForm
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            let postData = `password=${item.password}&level=${item.level}`
+            const postData = `password=${item.password}&level=${item.level}`
             updateUser(item.id, postData).then(res => {
               this.sendUpdate()
               this.$notify({title: '成功', message: '更新成功', type: 'success', duration: 2000})

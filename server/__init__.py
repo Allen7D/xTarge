@@ -17,8 +17,7 @@ __author__ = 'Alimazing'
 
 
 def create_app():
-    app = Flask(__name__, static_folder="../dist/static",
-                template_folder="../dist")
+    app = Flask(__name__, static_folder="../dist/static", template_folder="../dist")
     app.config.from_object('server.config')
     register_blueprint(app)
 

@@ -1,26 +1,32 @@
 <template>
   <div class="user">
-    <div>
-      <el-button type="primary" icon="el-icon-circle-plus" @click="handleCreate"> 添加管理员</el-button>
-    </div>
-    <el-table ref="multipleTable" :data="userList" tooltip-effect="dark" height="800" border>
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="username" label="登录名" width="150" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="password" label="密码" width="150" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="level" label="权限" width="80" show-overflow-tooltip></el-table-column>
-      <el-table-column label="注册日期">
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i><span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="200" label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="danger">删除</el-button>
-        </template>
+    <el-button type="primary" icon="el-icon-circle-plus" @click="handleCreate"> 添加管理员</el-button>
+    <el-table ref="multipleTable" :data="list" tooltip-effect="dark" height="800" border>
+      <el-table-column label="用户列表">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="id" label="ID" width="80"></el-table-column>
+        <el-table-column prop="username" label="登录名" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="password" label="密码" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="level" label="权限" width="80" show-overflow-tooltip></el-table-column>
+        <el-table-column label="注册日期">
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i><span style="margin-left: 10px">{{ scope.row.date }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="200" label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+            <el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="danger">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
+
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
+                     :page-sizes="[10, 20, 30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      </el-pagination>
+    </div>
 
     <user-editor :show.sync="show" @update="getUserData" :dialogStatus="dialogStatus" :dataForm="tempUser" :currentLevel="currentUser.level"></user-editor>
 
@@ -37,7 +43,12 @@
     },
     data() {
       return {
-        userList: [],
+        list: [],
+        total: null,
+        listQuery: {
+          limit: 10,
+          page: 1
+        },
         dialogStatus: '',
         show: false,
         currentUser: {id: localStorage['id'], level: localStorage['level']},
@@ -46,18 +57,27 @@
     },
     methods: {
       getUserData() {
-        this.userList = []
-        fetchUser().then(res => {
-          res.data.users.forEach((item, index) => {
-            this.userList.push({
+        this.list = []
+        fetchUser(this.listQuery).then(res => {
+          this.total = res.data.total
+          res.data.data.forEach((item, index) => {
+            this.list.push({
               id: item.user_id,
-              date: item.register_time,
+              date: item.create_time,
               username: item.username,
               password: '******',
               level: item.level
             })
           })
         })
+      },
+      handleSizeChange(val) {
+        this.listQuery.limit = val
+        this.getUserData()
+      },
+      handleCurrentChange(val) {
+        this.listQuery.page = val
+        this.getUserData()
       },
       notify(message) {
         this.$notify({title: '警告', message: message, type: 'warning', duration: 2000})
@@ -104,7 +124,7 @@
         }).then(() => {
           deleteUser(row.id).then((res) => {
             this.message('success', '删除成功!')
-            this.userList.splice(index, 1)
+            this.list.splice(index, 1)
           })
         }).catch(() => {
           this.message('info', '已取消删除')
@@ -122,4 +142,6 @@
     width: 100%
     .el-button
       margin-bottom: 10px
+    .pagination-container
+        margin-top: 30px
 </style>

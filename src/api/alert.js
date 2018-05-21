@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchAlert() {
+export function fetchAlert(params) {
   return request({
     url: '/api/v1.0/alerts',
-    method: 'get'
+    method: 'get',
+    params: params
   })
 }
 

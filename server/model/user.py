@@ -17,7 +17,7 @@ class User:
         'user_id': user.get('_id'),
         'username': user.get('name'),
         'level': user.get('level'),
-        'register_time': user.get('register_time')
+        'create_time': user.get('create_time')
       })
 
     return {'users': user_list}
@@ -32,13 +32,13 @@ class User:
       return user
 
   @staticmethod
-  def add_user(user):
+  def create_user(user):
     user = {
       '_id': int(user['id']),
       'name': user['username'],
       'password': generate_password_hash(user['password']),
       'level': user['level'],
-      'register_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+      'create_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     }
     db_user.insert(user)
 

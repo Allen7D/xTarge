@@ -10,6 +10,9 @@
             <i class="el-icon-caret-bottom"></i>
           </div>
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <span style="display:block">用户:{{username}}</span>
+            </el-dropdown-item>
               <el-dropdown-item>
                 <span @click="toAdmin" style="display:block">后台管理</span>
               </el-dropdown-item>
@@ -31,9 +34,14 @@
   export default {
     data() {
       return {
-        name: '',
         avata: '',
         logo
+      }
+    },
+    computed: {
+      // username在data中有延迟
+      username() {
+        return this.$store.state.username
       }
     },
     methods: {
@@ -44,6 +52,9 @@
         this.$router.push('/modbus')
       },
       logout() {
+        localStorage['username'] = ''
+        localStorage['isLogin'] = false
+        localStorage['level'] = ''
         this.$router.push('/login')
       }
     }

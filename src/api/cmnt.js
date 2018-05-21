@@ -1,15 +1,16 @@
 import request from '@/utils/request'
 
-export function fetchCmnt() {
+export function fetchCmnt(params) {
   return request({
-    url: '/api/v1.0/users',
-    method: 'get'
+    url: '/api/v1.0/cmnts',
+    method: 'get',
+    params: params
   })
 }
 
 export function deleteCmnt(query) {
   return request({
-    url: `/api/v1.0/users/${query}`,
+    url: `/api/v1.0/cmnts/${query}`,
     method: 'delete'
   })
 }

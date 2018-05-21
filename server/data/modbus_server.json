@@ -6,23 +6,56 @@
     "restrictions": [
         {
             "address": {
-                "ip": "192.168.3.148",
-                "mac": "d0:17:c2:9a:b4:51",
+                "ip": "34124",
+                "mac": "1341",
                 "default": true
             },
             "function_codes": [
                 {
-                    "id": 1,
-                    "default": false,
-                    "excepts": []
-                },
-                {
                     "id": 3,
                     "default": true,
                     "excepts": []
+                },
+                {
+                    "id": 127,
+                    "default": true,
+                    "excepts": [
+                        {
+                            "start": {
+                                "year": 2018,
+                                "mon": 5,
+                                "day": 24,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            },
+                            "end": {
+                                "year": 2018,
+                                "mon": 6,
+                                "day": 26,
+                                "hour": 0,
+                                "min": 0,
+                                "sec": 0,
+                                "wday": -1
+                            }
+                        }
+                    ]
                 }
             ],
-            "memories": []
+            "memories": [
+                {
+                    "id": 1,
+                    "id2": 127,
+                    "default": true,
+                    "excepts": [
+                        {
+                            "start": "192.168.0.11",
+                            "end": "192.168.0.22"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
