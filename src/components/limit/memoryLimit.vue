@@ -40,7 +40,6 @@
                                         inactive-text="关闭">
                                 </el-switch>
                             </el-form-item>
-                            <span>例外</span>
                             <el-form-item>
                                 <el-form class="in-line" :inline="true"
                                          v-for="(except, index) in memory.excepts"

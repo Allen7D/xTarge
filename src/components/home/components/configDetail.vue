@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="restrictions border-2px" v-if="configForm.restrictions">
+      <div class="restrictions border-2px" v-if="configForm.restrictions.length">
         <h2>限制项</h2>
         <div class="restriction border-2px" v-for="(restriction, rIndex) in configForm.restrictions" :key="rIndex">
           <h3>限制项 {{rIndex + 1}}</h3>
@@ -24,37 +24,26 @@
             <el-input placeholder="请输入内容" v-model="restriction.address.mac" disabled>
               <template slot="prepend">MAC地址</template>
             </el-input>
-            <el-switch v-model="restriction.address.default" active-text="开启" inactive-text="关闭" disabled>
-            </el-switch>
+            <el-switch v-model="restriction.address.default" active-text="开启" inactive-text="关闭" disabled></el-switch>
 
-            <div v-if="restriction.function_codes" class="border-2px" style="margin-top: 10px; padding-left: 30px">
+            <div v-if="restriction.function_codes.length" class="border-2px" style="margin-top: 10px; padding-left: 30px">
               <el-collapse v-model="activeName" accordion>
                 <el-collapse-item name="1">
                   <template slot="title">
-                    <nav class="config-titile">
-                      功能码限制
-                    </nav>
+                    <nav class="config-titile">功能码限制</nav>
                   </template>
                   <el-form
-                    v-for="(function_code, fcIndex) in restriction.function_codes"
-                    :key="function_code.id"
-                  >
+                    v-for="(function_code, fcIndex) in restriction.function_codes" :key="function_code.id">
                     <el-container class="function-code border-2px">
                       <el-main class="clearfix">
                         <el-form-item :inline="true">
                           功能码{{fcIndex + 1}}：
                           {{matchCodeID(function_code.id)}}
-                          <el-switch v-model="function_code.default" active-text="开启" inactive-text="关闭" disabled>
-                          </el-switch>
-
+                          <el-switch v-model="function_code.default" active-text="开启" inactive-text="关闭" disabled></el-switch>
                         </el-form-item>
-
                         <el-form-item v-if="function_code.excepts.length">
-                          <el-form class="in-line"
-                                   :inline="true"
-                                   v-for="(except, exceptIndex) in function_code.excepts"
-                                   :label="'例外 ' + exceptIndex + ' :'"
-                                   :key="except.key">
+                          <el-form class="in-line" :inline="true" v-for="(except, exceptIndex) in function_code.excepts"
+                                   :label="'例外 ' + exceptIndex + ' :'" :key="except.key">
                             <div class="except">
                               例外{{exceptIndex + 1}}:<format-date :time="except"></format-date>
                             </div>
@@ -67,13 +56,11 @@
               </el-collapse>
             </div>
 
-            <div v-if="restriction.memories" class="memory border-2px" style="margin-top: 10px;">
+            <div v-if="restriction.memories && restriction.memories.length" class="memory border-2px" style="margin-top: 10px;">
               <el-collapse v-model="activeName" accordion>
                 <el-collapse-item name="1">
                   <template slot="title">
-                    <nav class="config-titile">
-                      内存限制
-                    </nav>
+                    <nav class="config-titile">内存限制</nav>
                   </template>
 
                   <el-form v-for="memory in restriction.memories" :key="memory.key">
@@ -84,11 +71,8 @@
                           <el-switch v-model="memory.default" active-text="开启" inactive-text="关闭" disabled></el-switch>
                         </el-form-item>
                         <el-form-item v-if="memory.excepts.length !== 0">
-                          <el-form class="in-line" :inline="true"
-                                   style="margin: 5px"
-                                   v-for="(except, index) in memory.excepts"
-                                   :label="'例外 ' + index + ' :'"
-                                   :key="except.key">
+                          <el-form class="in-line" :inline="true" style="margin: 5px" v-for="(except, index) in memory.excepts"
+                                   :label="'例外 ' + index + ' :'" :key="except.key">
                             例外{{index + 1}} :
                             <el-input v-model="except.start" disabled>
                               <template slot="prepend">开始地址</template>

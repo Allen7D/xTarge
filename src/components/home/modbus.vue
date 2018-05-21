@@ -32,18 +32,15 @@
       </div>
     </div>
 
-    <config-detail :isShow.sync="isShowDetail" :configForm="configForm"
-                :currentCode="currentCode" :modbusMemory="memory"></config-detail>
-    <code-transfer :isShow.sync="isShowConfig" :updateCode="updateCode"
-                 :currentCode="currentCode" :reserveCode="reserveCode"
-    >
+    <config-detail :isShow.sync="isShowDetail" :configForm="configForm" :currentCode="currentCode" :modbusMemory="memory"></config-detail>
+    <code-transfer :isShow.sync="isShowConfig" :updateCode="updateCode" :currentCode="currentCode" :reserveCode="reserveCode">
     </code-transfer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import connection from 'components/connection/connection'
-  import alertInfo from './components/alertInfo'
+  import AlertInfo from './components/alertInfo'
   import mLimit from './mLimit'
   import UpdateFcn from './components/updateFcn'
   import FormatDate from 'components/time/formatDate'
@@ -55,9 +52,9 @@
   export default {
     components: {
       'v-connection': connection,
-      'alert-info': alertInfo,
       'm-limit': mLimit,
       UpdateFcn,
+      AlertInfo,
       FormatDate,
       ConfigDetail,
       CodeTransfer

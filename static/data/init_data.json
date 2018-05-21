@@ -57,12 +57,20 @@
         "0x7e Directory": ""
       },
       "appendable": {
-        "0x7f Test7f": "诊断7f",
-        "0x80 Test80": "诊断80",
-        "0x81 Test81": "诊断81",
-        "0x82 Test82": "诊断82",
-        "0x83 Test83": "诊断83",
-        "0x84 Test84": "诊断84"
+        "0x02 Single-point information with time tag": "",
+        "0x04 Double-point information with time tag": "",
+        "0x06 Step position information with time tag": "",
+        "0x08 Bitstring of 32 bit with time tag": "",
+        "0x0A Measured value, normalized value with time tag": "",
+        "0x0C Measured value, scaled value wit time tag": "",
+        "0x0E Measured value, short floating point number with time tag": "",
+        "0x10 Integrated totals with time tag": "",
+        "0x11 Event of protection equipment with time tag": "",
+        "0x12 Packed start events of protection equipment with time tag": "",
+        "0x13 Packed output circuit information of protection equipment with time tag": "",
+        "0x14 Packed single point information with status change detection": "",
+        "0x68 Test command": "",
+        "0x6A Delay acquisition command": ""
       }
     }
   },

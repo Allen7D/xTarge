@@ -116,17 +116,13 @@
     </el-dialog>
     <!--验证配置信息，结束-->
 
-    <config-detail :isShow.sync="isShowDetail" :configForm="configForm"
-                   :currentCode="currentCode"></config-detail>
-    <code-transfer :isShow.sync="isShowConfig" :updateCode="updateCode"
-                 :currentCode="currentCode" :reserveCode="reserveCode"
-    >
+    <config-detail :isShow.sync="isShowDetail" :configForm="configForm" :currentCode="currentCode"></config-detail>
+    <code-transfer :isShow.sync="isShowConfig" :updateCode="updateCode" :currentCode="currentCode" :reserveCode="reserveCode">
     </code-transfer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import functionCodeLimit from 'components/limit/functionCodeLimit'
   import iec104Limit from 'components/home/iLimit'
   import connection from 'components/connection/connection'
   import AlertInfo from './components/alertInfo'
@@ -138,7 +134,6 @@
 
   export default {
     components: {
-      'fc-limit': functionCodeLimit,
       'i-limit': iec104Limit,
       'v-connection': connection,
       AlertInfo,
