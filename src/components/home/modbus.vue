@@ -9,7 +9,7 @@
         <!--报警连接-->
         <v-connection :connection="configForm.connection"></v-connection>
         <!--功能码限制-->
-        <m-limit :fc_options="fc_options" :m_options="m_options" :restrictions="configForm.restrictions"
+        <m-limit :fc_options="currentCode" :m_options="memory" :restrictions="configForm.restrictions"
                  :connection="configForm.connection"></m-limit>
       </el-form>
       <div class="command">
@@ -62,17 +62,17 @@
     data() {
       return {
         total: null,
+        list: [],
         listQuery: {
           limit: 10,
           page: 1,
           type: 'modbus'
         },
-        list: [],
+        isShowDetail: false,
         isShowConfig: false,
         currentCode: this.$store.state.modbus.currentCode,
         reserveCode: this.$store.state.modbus.reserveCode,
         memory: this.$store.state.modbus.memory,
-        isShowDetail: false,
         activeName: '1',
         configForm: {
           connection: {
@@ -81,17 +81,6 @@
           },
           restrictions: []
         }
-      }
-    },
-    computed: {
-      totalCode() {
-        return this.currentCode.concat(this.reserveCode)
-      },
-      fc_options() {
-        return this.$store.state.modbus.currentCode
-      },
-      m_options() {
-        return this.$store.state.modbus.memory
       }
     },
     mounted() {
@@ -109,15 +98,9 @@
           dangerouslyUseHTMLString: true,
           callback: action => {
             if (action === 'confirm') {
-              this.$message({
-                message: '验证成功!',
-                type: 'success'
-              })
+              this.$message({message: '验证成功!', type: 'success'})
             } else if (action === 'cancel') {
-              this.$message({
-                message: '验证取消!',
-                type: 'info'
-              })
+              this.$message({message: '验证取消!', type: 'info'})
             }
           }
         })
@@ -134,16 +117,18 @@
             'user_name': localStorage['username'],
             'user_id': localStorage['id']
           })
-          let postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&oper=${JSON.stringify(this.configForm, null)}`
-          createOperate(postData).then(res => {
+          this.createOperateDate()
+        }).catch(() => {
+          this.$message({type: 'info', message: '已取消发送!'})
+        })
+      },
+      createOperateDate() {
+        const postData = `user_id=${localStorage['id']}&username=${localStorage['username']}&protocol_type=modbus&oper=${JSON.stringify(this.configForm, null)}`
+        createOperate(postData).then(res => {
           this.$message({type: 'success', message: '发送成功!'})
         }).catch(err => {
           console.log('err', err)
         })
-      })
-      .catch(() => {
-          this.$message({type: 'info', message: '已取消发送!'})
-      })
       },
       getAlertData() {
         this.list = []
@@ -178,6 +163,9 @@
       },
       setting(message) {
         console.log('modbus', message)
+      },
+      init(msg) {
+        this.configForm = JSON.parse(msg.modbus)
       }
     }
   }

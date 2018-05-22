@@ -60,7 +60,10 @@
                         }
                     }]
                 },
-                dateValue: ''
+                dateValue: [
+                    new Date(this.startDate.year, this.startDate.mon, this.startDate.day, this.startDate.hour, this.startDate.min, this.startDate.sec),
+                    new Date(this.endDate.year, this.endDate.mon, this.endDate.day, this.endDate.hour, this.endDate.min, this.endDate.sec)
+                ]
             }
         },
         watch: {
@@ -78,26 +81,6 @@
                 this.endDate.hour = val[1].getHours()
                 this.endDate.min = val[1].getMinutes()
                 this.endDate.sec = val[1].getSeconds()
-//                this.except.$set(0, {
-//                    start: {
-//                        year: val[0].getYear() + 1900,
-//                        mon: val[0].getMonth() + 1,
-//                        day: val[0].getDate(),
-//                        hour: val[0].getHours(),
-//                        min: val[0].getMinutes(),
-//                        sec: val[0].getSeconds(),
-//                        wday: -1
-//                    },
-//                    end: {
-//                        year: val[1].getYear() + 1900,
-//                        mon: val[1].getMonth() + 1,
-//                        day: val[1].getDate(),
-//                        hour: val[1].getHours(),
-//                        min: val[1].getMinutes(),
-//                        sec: val[1].getSeconds(),
-//                        wday: -1
-//                    }
-//                })
             }
         }
     }

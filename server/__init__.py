@@ -162,8 +162,7 @@ def monitor_server(port, type, socketio):
                         socketio.emit("alert", new_obj)
                         MongoClient().safe_protocol.alert.insert(new_obj)
                     else:
-                        new_obj = {'buffer': ctx['Buffer'], 'ip': ctx[
-                            'client IP'], 'time': time}
+                        new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client IP'], 'time': time}
                         print(new_obj)
                         socketio.emit("ctx", new_obj)
                         MongoClient().safe_protocol.cmnt.insert(new_obj)

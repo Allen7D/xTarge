@@ -7,42 +7,23 @@
                         功能码限制
                     </nav>
                 </template>
-                <el-form
-                        v-for="(function_code, fcIndex) in function_codes"
-                        :key="function_code.key"
-                >
+                <el-form v-for="(function_code, fcIndex) in function_codes" :key="function_code.key">
                     <el-container>
                         <el-main class="clearfix">
                             <el-form-item :inline="true">
                                 功能码{{fcIndex}}：
-
                                 <el-select v-model="function_code.id" placeholder="请选择">
-                                    <el-option v-for="item in fc_options"
-                                            :key="item.id" :value="item.id" :label="item.value"
-                                    >
-                                    </el-option>
+                                    <el-option v-for="item in fc_options" :key="item.id" :value="item.id" :label="item.value"></el-option>
                                 </el-select>
-
                                 默认打开：
-                                <el-switch
-                                        v-model="function_code.default"
-                                        active-text="开启"
-                                        inactive-text="关闭">
-                                </el-switch>
-
+                                <el-switch v-model="function_code.default" active-text="开启" inactive-text="关闭"></el-switch>
                             </el-form-item>
                             <el-form-item>
-                                <el-form class="in-line"
-                                         :inline="true"
-                                         v-for="(except, exceptIndex) in function_code.excepts"
-                                         :label="'例外 ' + exceptIndex + ' :'"
-                                         :key="except.key">
+                                <el-form class="in-line" :inline="true" v-for="(except, exceptIndex) in function_code.excepts" :label="'例外 ' + exceptIndex + ' :'" :key="except.key">
                                     <el-form-item>
-                                        <v-date-time-picker :startDate="except.start"
-                                                            :endDate="except.end"></v-date-time-picker>
+                                        <v-date-time-picker :startDate="except.start" :endDate="except.end"></v-date-time-picker>
                                     </el-form-item>
-                                    <el-button type="danger"
-                                               @click.prevent="removeArray(function_code.excepts, except)">删除
+                                    <el-button type="danger" @click.prevent="removeArray(function_code.excepts, except)">删除
                                     </el-button>
                                 </el-form>
                             </el-form-item>

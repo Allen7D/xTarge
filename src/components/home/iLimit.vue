@@ -39,10 +39,7 @@
                                             </el-form-item>
 
                                             <el-form-item>
-                                                <el-switch
-                                                        v-model="restriction.address.default"
-                                                        active-text="开启"
-                                                        inactive-text="关闭">
+                                                <el-switch v-model="restriction.address.default" active-text="开启" inactive-text="关闭">
                                                 </el-switch>
                                             </el-form-item>
                                         </el-form>
@@ -51,8 +48,7 @@
                                     <el-container>
                                         <el-main>
                                             <!--功能码限制 开始-->
-                                            <fc-limit :fc_options="fc_options"
-                                                      :function_codes="restriction.function_codes"></fc-limit>
+                                            <fc-limit :fc_options="fc_options" :function_codes="restriction.function_codes"></fc-limit>
                                             <!--功能码限制 结束-->
                                         </el-main>
                                     </el-container>

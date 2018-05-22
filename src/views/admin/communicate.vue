@@ -6,7 +6,7 @@
         </el-table-column>
         <el-table-column sortable prop="time" label="时间" width="200">
         </el-table-column>
-        <el-table-column sortable prop="ip" label="类型" width="150">
+        <el-table-column sortable prop="ip" label="IP地址" width="150">
         </el-table-column>
         <el-table-column prop="buffer" label="Message">
         </el-table-column>
