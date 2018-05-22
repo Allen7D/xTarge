@@ -1,4 +1,5 @@
-安装Server端（产生Iec104和Modbus的Server）：
+## 安装Server端：
+产生Iec104和Modbus的Server
 
 1.将Modbus和Iec的文件夹放在一定的目录下：如 /usr/local/safe/ （接下来将以此目录为例）
 
@@ -18,23 +19,21 @@
 
 	（3）$sudo chmod 755 modbus.json  iec104.json
 
-3. 运行Modbus 的Server
+
+3.运行Modbus 的Server
 
 	（1）$cd /usr/local/safe/Modbus/server_debug
 
 	（2）$sudo ./server
 
-4. 运行Iec104 的Server
+4.运行Iec104 的Server
 
 	（1）$cd /usr/local/safe/IEC/GuyiIec
 
 	（2）$sudo ./server
 
 
-
-
-
-安装前后端步骤：
+## 安装前后端步骤
 
 1.在一定目录下（比如/usr/local/safe/）: 
 
