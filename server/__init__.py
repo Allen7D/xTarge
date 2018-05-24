@@ -77,7 +77,7 @@ def iec104_monitor_server(port=8010, type='iec104', socketio=None):
                         MongoClient().safe_protocol.alert.insert(new_obj)
                     else:
                         new_obj = {'buffer': ctx['Buffer'], 'ip': ctx[
-                            'client IP'], 'time': time}
+                            'client Ip'], 'time': time}
                         socketio.emit("ctx", new_obj)
                         MongoClient().safe_protocol.cmnt.insert(new_obj)
 
@@ -117,7 +117,7 @@ def modbus_monitor_server(port=8020, type='modbus', socketio=None):
                         MongoClient().safe_protocol.alert.insert(new_obj)
                     else:
                         new_obj = {'buffer': ctx['Buffer'], 'ip': ctx[
-                            'client IP'], 'time': time}
+                            'client Ip'], 'time': time}
                         socketio.emit("ctx", new_obj)
                         MongoClient().safe_protocol.cmnt.insert(new_obj)
 
@@ -162,7 +162,7 @@ def monitor_server(port, type, socketio):
                         socketio.emit("alert", new_obj)
                         MongoClient().safe_protocol.alert.insert(new_obj)
                     else:
-                        new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client IP'], 'time': time}
+                        new_obj = {'buffer': ctx['Buffer'], 'ip': ctx['client Ip'], 'time': time}
                         print(new_obj)
                         socketio.emit("ctx", new_obj)
                         MongoClient().safe_protocol.cmnt.insert(new_obj)
@@ -219,7 +219,7 @@ class Monitor(object):
                             MongoClient().safe_protocol.alert.insert(new_obj)
                         else:
                             new_obj = {'buffer': ctx['Buffer'], 'ip': ctx[
-                                'client IP'], 'time': time}
+                                'client Ip'], 'time': time}
                             print(new_obj)
                             socketio.emit("ctx", new_obj)
                             MongoClient().safe_protocol.cmnt.insert(new_obj)
